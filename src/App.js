@@ -6,13 +6,11 @@ import {Nav, Navbar} from "react-bootstrap";
 import getWeb3 from "./getWeb3";
 import LendingPopup from "./Component/LendingPopup"
 import NFTLoader from "./Component/NFTLoader"
-import NFTplanet from "./contracts/NFTplanet.json";
 import axios from 'axios';
 import querystring from 'querystring';
 import dotenv from 'dotenv';
 import { NFTStorage, File } from 'nft.storage'
-
-
+import NFTPlanet from './contracts/NFTplanet.json'
 
 
 class ThreeScene extends Component {
@@ -77,14 +75,17 @@ class ThreeScene extends Component {
       const accounts = await web3.eth.getAccounts();
 
       // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      console.log(NFTplanet.networks);
-      const deployedNetwork = NFTplanet.networks[networkId];
-      console.log("deployedNetwork",deployedNetwork);
+     /* const networkId = await web3.eth.net.getId();
+      console.log(NFTPlanet.networks);
+      const deployedNetwork = NFTPlanet.networks[networkId];
+      console.log("deployedNetwork",deployedNetwork);*/
 
       const instance = new web3.eth.Contract(
-          NFTplanet.abi,
+          NFTPlanet.abi,
+  "0xe27Ca6a5B8BF1350cE50D103853836a8d24a9f7E"
+/*
           deployedNetwork && deployedNetwork.address,
+*/
       );
 
       this.state.contract = instance;
@@ -235,7 +236,9 @@ class ThreeScene extends Component {
 
   createNFTPlanet = async (NFTName, NFTDescription, NFTFile) => {
 
-    const apiKey = process.env.API_NFT_STORAGE_KEY.toLowerCase();
+    dotenv.config();
+    //const apiKey = process.env.API_NFT_STORAGE_KEY;
+    const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDIwODZiMDI0NjZEQTQwQjBFNDEyOGM0NTdCMDFDYzZDMzhhYUZhZEIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYyNzE1NzExMjE5MCwibmFtZSI6IlBsYW5ldE5GVCJ9.wVX9L6uGGTRxxGg7jneXUYgd0Q8lveKFXnWCUo0tvkc";
     const client = new NFTStorage({token: apiKey})
 
     const metadata = await client.store({
@@ -244,13 +247,14 @@ class ThreeScene extends Component {
       image: NFTFile
     });
     console.log(metadata.url);
-   /* await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
-        .send({from: this.state.accounts[0]})
+
+    this.state.contract.methods.mintPlanet(metadata.url, NFTName)
+        .send({from: this.state.accounts[0], value: 0.01*10**18})
         .then(res => {
           console.log('Success', res);
           alert(`You have successfully created an ${NFTName} NFT!`)
         })
-        .catch(err => console.log(err));*/
+        .catch(err => console.log(err));
   }
 
 

@@ -11,8 +11,8 @@ class Popup extends Component {
             closePopup: this.props.closePopup,
             selectedFile: null,
             isFilePicked: false,
-            NFTName: "",
-            NFTDescription: ""
+            NFTName: "name",
+            NFTDescription: "description"
         }
     }
 
@@ -24,12 +24,12 @@ class Popup extends Component {
     handleSubmission = async () => {
         let data = this;
         console.log(this.state.selectedFile);
-        await this.props.createNFTPlanet(this.state.name, this)
+        await this.props.createNFTPlanet(this.state.NFTName, this.state.NFTDescription, this.state.selectedFile);
     };
 
     render() {
         return (
-            <div className='popup'>
+            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto'}}>
                 <div className='popup_inner'>
                     <Modal.Dialog centered>
                         <Modal.Header>
