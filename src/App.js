@@ -10,9 +10,11 @@ class ThreeScene extends Component {
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
+      planets: []
     };
     this.updateDimensions = this.updateDimensions.bind(this);
-
+    this.getXYPosition = this.getXYPosition.bind(this);
+    this.getRandomLogInt = this.getRandomLogInt.bind(this);
   }
 
   updateDimensions = () => {
@@ -20,6 +22,7 @@ class ThreeScene extends Component {
   };
 
   componentDidMount() {
+
     const width = this.state.width;
     const height = this.state.height;
     this.scene = new THREE.Scene();
@@ -46,13 +49,38 @@ class ThreeScene extends Component {
     this.scene.add(lights[1]);
     this.scene.add(lights[2]);
 
-    var geometry2 = new THREE.CircleGeometry(36, 128);
-    geometry2.rotateX(-Math.PI / 2);
-    var material2 = new THREE.LineBasicMaterial( { color: 0xCC0000 } );
-    var mesh2 = new THREE.Line( geometry2, material2 );
+    //ADD Your 3D Models here
+    const cubeGeometry = new THREE.SphereGeometry(3);
+    const material = new THREE.MeshBasicMaterial({
+      color: '#6ab056',
+      wireframe: true
+    });
+    this.cubeMesh = new THREE.Mesh(cubeGeometry, material);
 
-    for ( let i = 0; i < 2000; i ++ ) {
-      this.createSphere()
+    this.cubeMesh.position.x = 36;
+    this.cubeMesh.position.y = 0;
+    this.scene.add(this.cubeMesh);
+
+
+    for ( let i = 2; i < 6; i++) {
+      const curve = new THREE.EllipseCurve(
+          0,  0,            // ax, aY
+          100*Math.log(i), 100*Math.log(i),           // xRadius, yRadius
+          0,  2 * Math.PI,  // aStartAngle, aEndAngle
+          false,            // aClockwise
+          0                 // aRotation
+      );
+
+      const points = curve.getPoints( 128 );
+      const geometry3 = new THREE.BufferGeometry().setFromPoints( points );
+      geometry3.rotateX(-Math.PI / 2);
+      const material3 = new THREE.LineBasicMaterial( { color : 0xCC0000 } );
+      const ellipse = new THREE.Line( geometry3, material3 );
+      this.scene.add(ellipse);
+    }
+    for ( let i = 0; i < 100; i ++ ) {
+      let radius = this.getRandomLogInt(2, 5);
+      this.createSphere(radius)
     }
     this.renderScene();
     //start animation
@@ -60,29 +88,61 @@ class ThreeScene extends Component {
 
     window.addEventListener('resize', this.updateDimensions);
 
+    setInterval(() => {
+
+    }, 300);
+
   }
 
-  createSphere() {
-    const cubeGeometry = new THREE.SphereGeometry(3);
-    const material = new THREE.MeshBasicMaterial({
-      color: '#6ab056',
-      wireframe: true
+  createSphere(radius) {
+      const cubeGeometry = new THREE.SphereGeometry(3);
+      const material = new THREE.MeshBasicMaterial({
+          color: '#6ab056',
+          wireframe: true
+      });
+      let cubeMesh = new THREE.Mesh(cubeGeometry, material);
+
+      let planet = {
+        radius: radius,
+        angle:  Math.random() * 360
+      }
+      this.addPlanet(planet);
+
+      const posXY = this.getXYPosition(planet);
+      cubeMesh.position.x = posXY.positionX;
+      cubeMesh.position.z = posXY.positionZ;
+      cubeMesh.position.y = 0
+
+      cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
+      cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
+      cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
+
+      cubeMesh.scale.x = Math.random() + 0.5;
+      cubeMesh.scale.y = Math.random() + 0.5;
+      cubeMesh.scale.z = Math.random() + 0.5;
+
+      this.scene.add(cubeMesh);
+  }
+
+  addPlanet = (planet) => {
+    const planets = this.state.planets.slice();
+    planets.push(planet);
+    this.setState({planets: planet}, () => {
+      console.log(this.state.planets);
     });
-    let cubeMesh = new THREE.Mesh(cubeGeometry, material);
+  }
 
-    cubeMesh.position.x = Math.random() * 800 - 400;
-		cubeMesh.position.y = Math.random() * 800 - 400;
-		cubeMesh.position.z = Math.random() * 800 - 400;
+  getXYPosition = (planet) => {
+    return {
+      positionX: planet.radius*Math.cos(planet.angle),
+      positionZ: planet.radius*Math.sin(planet.angle)
+    }
+  }
 
-		cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
-		cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
-		cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
-
-		cubeMesh.scale.x = Math.random() + 0.5;
-		cubeMesh.scale.y = Math.random() + 0.5;
-		cubeMesh.scale.z = Math.random() + 0.5;
-
-    this.scene.add(cubeMesh);
+   getRandomLogInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return 100*Math.log(Math.floor(Math.random() * (max - min + 1)) + min);
   }
 
   start = () => {
