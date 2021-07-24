@@ -12,7 +12,8 @@ class ThreeScene extends Component {
       height: window.innerHeight,
       planets: [],
       raycaster: new THREE.Raycaster(),
-      intersected: null
+      intersected: null,
+      isSelected: false,
     };
 
     this.mouse = new THREE.Vector2();
@@ -98,12 +99,11 @@ class ThreeScene extends Component {
     window.addEventListener('resize', this.updateDimensions);
     window.addEventListener( 'mousemove', this.onMouseMove, false );
 
-
-
+    window.addEventListener( 'click', this.onMouseClick, false );
   }
 
   createSphere(radius) {
-      const cubeGeometry = new THREE.SphereGeometry(3, 32, 32);
+      const cubeGeometry = new THREE.SphereGeometry(3, 16, 16);
       const material = new THREE.MeshBasicMaterial({
           color: '#6ab056',
           wireframe: true
@@ -112,7 +112,7 @@ class ThreeScene extends Component {
 
       let planet = {
         radius: radius,
-        angle:  Math.random() * 360
+        angle:  Math.random() * 360,
       }
 
       const posXY = this.getXYPosition(planet);
@@ -178,6 +178,17 @@ class ThreeScene extends Component {
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     this.setState({mouse: mouse})
+
+    if (this.state.intersected !== null) {
+          this.setState({isSelected: true}, () => {
+            console.log(this.state.isSelected);
+          });
+    } else {
+      this.setState({isSelected: false}, () => {
+        console.log(this.state.isSelected);
+      });
+    }
+
   }
 
   start = () => {
@@ -220,8 +231,7 @@ class ThreeScene extends Component {
     // calculate objects intersecting the picking ray
     const intersects = this.state.raycaster.intersectObjects( this.scene.children );
 
-    if ( intersects.length == 1 ) {
-
+    if ( intersects.length == 1) {
 
       intersects[0].object.material.color.set(0xff0000);
       this.setState({intersected: intersects[0].object});
