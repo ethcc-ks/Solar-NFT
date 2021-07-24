@@ -4,14 +4,17 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./IProofOfHumanity.sol";
 
 contract NFTplanet is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter public totalPlanets;
     mapping (address => uint256[]) planetsIds;
     mapping(uint256 => Planet) public allPlanets;
+    mapping(address => bool) POHOwner;
     event NewPlanet(uint256 id);
-     
+    address public constant POH_ADDRESS = 0xC5E9dDebb09Cd64DfaCab4011A0D5cEDaf7c9BDb; // ETH mainnet
+    ProofOfHumanity proofContract;
 
     struct Planet {
         string name;
@@ -27,32 +30,56 @@ contract NFTplanet is ERC721URIStorage {
         uint256 id;
     }
 
-    constructor() ERC721("PlanetNFT", "PNFT") {}
-
-    function mintPlanet(string memory tokenURI, string memory name) public returns (uint256)
-    {   
-        uint256 newPlanetId = totalPlanets.current();
+    constructor() ERC721("PlanetNFT", "PNFT") {
+        proofContract= ProofOfHumanity(POH_ADDRESS);
+    }
 
 
-        totalPlanets.increment();  
+    function mintPlanet(string memory tokenURI, string memory name) payable public 
+    { 
+        if(proofContract.isRegistered(msg.sender) && !POHOwner[msg.sender]){
+            POHOwner[msg.sender]=true;
+            uint256 newPlanetId = totalPlanets.current();
 
-        _mint(msg.sender, newPlanetId);
+            totalPlanets.increment();  
 
-        uint256[] storage allIds =  planetsIds[msg.sender];
-        allIds.push(newPlanetId);
+            _mint(msg.sender, newPlanetId);
 
-        _setTokenURI(newPlanetId, tokenURI);
+            uint256[] storage allIds =  planetsIds[msg.sender];
+            allIds.push(newPlanetId);
 
-        emit NewPlanet(newPlanetId);
+            _setTokenURI(newPlanetId, tokenURI);
 
-        Planet storage newPlanet = allPlanets[newPlanetId];
-        newPlanet.name = name;
-        newPlanet.PlanetId = newPlanetId;
-        newPlanet.owner = msg.sender;
-        newPlanet.slots =5;
-        newPlanet.nftCounter=0;
+            emit NewPlanet(newPlanetId);
 
-        return newPlanetId;
+            Planet storage newPlanet = allPlanets[newPlanetId];
+            newPlanet.name = name;
+            newPlanet.PlanetId = newPlanetId;
+            newPlanet.owner = msg.sender;
+            newPlanet.slots =5;
+            newPlanet.nftCounter=0;
+        }else if(msg.value>= 0.0001 ether){
+           uint256 newPlanetId = totalPlanets.current();
+
+            totalPlanets.increment();  
+
+            _mint(msg.sender, newPlanetId);
+
+            uint256[] storage allIds =  planetsIds[msg.sender];
+            allIds.push(newPlanetId);
+
+            _setTokenURI(newPlanetId, tokenURI);
+
+            emit NewPlanet(newPlanetId);
+
+            Planet storage newPlanet = allPlanets[newPlanetId];
+            newPlanet.name = name;
+            newPlanet.PlanetId = newPlanetId;
+            newPlanet.owner = msg.sender;
+            newPlanet.slots =5;
+            newPlanet.nftCounter=0;
+        }
+        
     }
 
 
