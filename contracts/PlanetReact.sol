@@ -9,8 +9,12 @@ contract PlanetReact is NFTplanet{
     
     constructor()public NFTplanet(){  }
 
+    modifier onlyPlanetOwner(uint256 planetId){
+        require(msg.sender==allPlanets[planetId].owner);
+        _;
+    }
     // change the position of the planet
-    function move(uint256 planetId, uint256 _p, uint256 _r, uint256 _a) public {
+    function move(uint256 planetId, uint256 _p, uint256 _r, uint256 _a) private {
         Planet storage currentPlanet = allPlanets[planetId];
         currentPlanet.a = _a;
         currentPlanet.p = _p;
@@ -18,26 +22,32 @@ contract PlanetReact is NFTplanet{
     }
 
     /// @notice add an NFT in the planet canvas (5 available)
-    function addNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId) public{
+    function addNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId) public onlyPlanetOwner(planetId){
         require(msg.sender==nftContract.ownerOf(tokenId));
         Planet storage currentPlanet = allPlanets[planetId];
         for (uint256 index = 0; index < currentPlanet.allNfts.length; index++) {
             if(currentPlanet.allNfts[index].contractAddress != address(0)){
-
+                currentPlanet.allNfts[index].contractAddress=address(nftContract);
+                currentPlanet.allNfts[index].id=tokenId;
+                break;
             }
         }
     }
 
     /// @notice for change the look of the canvas
-    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
-    /// @return Documents the return variables of a contract’s function state variable
-    function removeNFT() public {}
+    function removeNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId) public onlyPlanetOwner(planetId) {
+        Planet storage currentPlanet = allPlanets[planetId];
+        for (uint256 index = 0; index < currentPlanet.allNfts.length; index++) {
+            if(currentPlanet.allNfts[index].contractAddress == address(nftContract) && currentPlanet.allNfts[index].id == tokenId){
+                currentPlanet.allNfts[index].contractAddress=address(0);
+                break;
+            }
+        }
+    }
 
     /// @notice after winning a game we have the choice to add slot +1
-    /// @dev Explain to a developer any extra details
-    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
-    function addSlot() {
-        require(condition);
+    function addSlot() private{
+        
     }
 
     /// @notice trasnfer planets or nft's

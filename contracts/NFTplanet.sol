@@ -29,7 +29,7 @@ contract NFTplanet is ERC721URIStorage {
 
     constructor() ERC721("PlanetNFT", "PNFT") {}
 
-    function mintPlanet(address player, string memory tokenURI, string memory name) public returns (uint256)
+    function mintPlanet(string memory tokenURI, string memory name) public returns (uint256)
     {   
         uint256 r;
         uint256 p;
@@ -39,7 +39,7 @@ contract NFTplanet is ERC721URIStorage {
 
         totalPlanets.increment();  
 
-        _mint(player, newPlanetId);
+        _mint(msg.sender, newPlanetId);
 
         uint256[] storage allIds =  planetsIds[msg.sender];
         allIds.push(newPlanetId);
@@ -56,7 +56,7 @@ contract NFTplanet is ERC721URIStorage {
         newPlanet.p = p;
         newPlanet.a = a;
         newPlanet.PlanetId = newPlanetId;
-        newPlanet.owner = player;
+        newPlanet.owner = msg.sender;
         newPlanet.allNfts = new NftArt[](5);
 
         allPlanets[newPlanetId]= newPlanet;
