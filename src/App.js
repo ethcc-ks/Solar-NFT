@@ -2,6 +2,9 @@ import React, {Component, useLayoutEffect} from "react";
 import * as THREE from "three";
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 import OrbitControls from "three-orbitcontrols";
+import {Nav, Navbar} from "react-bootstrap";
+import getWeb3 from "./getWeb3";
+
 class ThreeScene extends Component {
 
   constructor(props) {
@@ -9,11 +12,14 @@ class ThreeScene extends Component {
 
     this.state = {
       width: window.innerWidth,
-      height: window.innerHeight,
+      height: window.innerHeight-56,
       planets: [],
       raycaster: new THREE.Raycaster(),
       intersected: null,
       isSelected: false,
+      balance: null,
+      accounts: null,
+      web3: null,
     };
 
     this.mouse = new THREE.Vector2();
@@ -30,7 +36,41 @@ class ThreeScene extends Component {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    try {
+      // Get network provider and web3 instance.
+      console.log("RENDING");
+      const web3 = await getWeb3();
+
+      // Use web3 to get the user's accounts.
+      const accounts = await web3.eth.getAccounts();
+
+      // Get the contract instance.
+      const networkId = await web3.eth.net.getId();
+   /*   console.log(DynamicCollateralLending.networks);
+      const deployedNetwork = DynamicCollateralLending.networks[networkId];
+      console.log("deployedNetwork",deployedNetwork);
+
+      const instance = new web3.eth.Contract(
+          DynamicCollateralLending.abi,
+          deployedNetwork && deployedNetwork.address,
+      );
+
+      this.state.contract = instance;*/
+
+      this.state.balance = await web3.utils.fromWei(await web3.eth.getBalance(accounts[0]), 'ether');
+
+      //console.log(instance);
+      this.setState({ web3, accounts });
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      alert(
+          `Failed to load web3, accounts, or contract. Check console for details.`,
+      );
+      console.error(error);
+    }
+
 
     const width = this.state.width;
     const height = this.state.height;
@@ -120,7 +160,7 @@ class ThreeScene extends Component {
       cubeMesh.position.z = posXY.positionZ;
       cubeMesh.position.y = 0;
       planet.mesh = cubeMesh;
-      this.addPlanet(planet);
+      //this.addPlanet(planet);
 
       cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
@@ -203,13 +243,13 @@ class ThreeScene extends Component {
     console.log('planets ' + this.state.planets);
   //Animate Models Here
   //ReDraw Scene with Camera and Scene Object
-    for (let planet of Object.keys(this.state.planets)) {
+    /*for (let planet of Object.keys(this.state.planets)) {
       let currentPlanet = this.state.planets[planet];
 
       //console.log(planet);
-      /*currentPlanet.radial.angle++;
+      /!*currentPlanet.radial.angle++;
       currentPlanet.position.x = this.getXYPosition(currentPlanet.radial).positionX;
-      currentPlanet.position.z = this.getXYPosition(currentPlanet.radial).positionZ;*/
+      currentPlanet.position.z = this.getXYPosition(currentPlanet.radial).positionZ;*!/
     }
 
     Object.entries(this.state.planets).forEach(
@@ -217,7 +257,7 @@ class ThreeScene extends Component {
           if (key==='radial')
             console.log(key, value)
         }
-    );
+    );*/
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
@@ -231,7 +271,7 @@ class ThreeScene extends Component {
     // calculate objects intersecting the picking ray
     const intersects = this.state.raycaster.intersectObjects( this.scene.children );
 
-    if ( intersects.length == 1) {
+    if ( intersects.length === 1) {
 
       intersects[0].object.material.color.set(0xff0000);
       this.setState({intersected: intersects[0].object});
@@ -246,8 +286,31 @@ class ThreeScene extends Component {
 
   };
   render() {
-    return (<div
-        ref={mount => { this.mount = mount}}
-    />)
+    if (!this.state.web3) {
+      return <div>Loading Web3, accounts, and contract...</div>;
+    }
+    else {
+      return (
+          <div className="App">
+            <Navbar bg="light" variant="light" styled>
+              <Navbar.Brand href="#home">NFT PlanEth</Navbar.Brand>
+
+              <Nav className="mr-auto">
+                <Nav.Link href="#home"> Signed in as: {this.state.accounts[0]}</Nav.Link>
+              </Nav>
+
+              <Navbar.Collapse className="justify-content-end">
+                <Navbar.Text>
+                  Balance: {this.state.balance} ETH
+                </Navbar.Text>
+              </Navbar.Collapse>
+            </Navbar>
+            <div ref={mount => {
+              this.mount = mount
+            }}
+            />
+          </div>
+      )
+    }
   }}
 export default ThreeScene;
