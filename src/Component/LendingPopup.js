@@ -29,12 +29,12 @@ class LendingPopup extends Component {
                 <div className='popup_inner'>
                     <Modal.Dialog centered>
                         <Modal.Header>
-                            <Modal.Title>How much do you want to lend ?</Modal.Title>
+                            <Modal.Title>You are on the ... planet</Modal.Title>
                         </Modal.Header>
                         <Form>
                             <Form.Group controlId="formBasicText">
 
-                                <Form.Label>Lending Amount in ETH</Form.Label>
+                                <Form.Label>Explore more...</Form.Label>
                                 <Form.Control type="number" value={this.state.amountToLend} placeholder="1" onChange={this.handleLendingAmount} />
                             </Form.Group>
                         </Form>
