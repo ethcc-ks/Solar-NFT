@@ -1,11 +1,27 @@
-import React, { Component } from "react";
+import React, {Component, useLayoutEffect} from "react";
 import * as THREE from "three";
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 import OrbitControls from "three-orbitcontrols";
 class ThreeScene extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+    this.updateDimensions = this.updateDimensions.bind(this);
+
+  }
+
+  updateDimensions = () => {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  };
+
   componentDidMount() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = this.state.width;
+    const height = this.state.height;
     this.scene = new THREE.Scene();
     //Add Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -38,10 +54,18 @@ class ThreeScene extends Component {
     this.cubeMesh = new THREE.Mesh(cubeGeometry, material);
     this.scene.add(this.cubeMesh);
 
+    var geometry2 = new THREE.CircleGeometry(36, 128);
+    geometry2.rotateX(-Math.PI / 2);
+    var material2 = new THREE.LineBasicMaterial( { color: 0xCC0000 } );
+    var mesh2 = new THREE.Line( geometry2, material2 );
+
 
     this.renderScene();
     //start animation
     this.start();
+
+    window.addEventListener('resize', this.updateDimensions);
+
   }
   start = () => {
     if (!this.frameId) {
