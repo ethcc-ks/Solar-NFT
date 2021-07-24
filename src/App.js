@@ -156,7 +156,7 @@ class ThreeScene extends Component {
   }
 
   createSphere(radius) {
-      const cubeGeometry = new THREE.SphereGeometry(3, 16, 16);
+      const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
       const material = new THREE.MeshBasicMaterial({
           color: '#6ab056',
           wireframe: true
@@ -173,7 +173,7 @@ class ThreeScene extends Component {
       cubeMesh.position.z = posXY.positionZ;
       cubeMesh.position.y = 0;
       planet.mesh = cubeMesh;
-      //this.addPlanet(planet);
+      this.addPlanet(planet);
 
       cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
@@ -192,12 +192,9 @@ class ThreeScene extends Component {
   }
 
   addPlanet = (planet) => {
-    const planets = this.state.planets.slice();
-    planets.push(planet);
-    const planetArray = this.state.planets.slice();
     this.planetArray.push(planet);
     this.setState({planets: planet}, () => {
-      // console.log(this.state.planets);
+      console.log(this.state.planets);
     });
   }
 
@@ -261,7 +258,7 @@ class ThreeScene extends Component {
     for (let i = 0; i < this.planetArray.length; i++) {
       let planet = this.planetArray[i]
 
-      this.planetArray[i].angle = (this.planetArray[i].angle > 360) ? 0 : this.planetArray[i].angle + 0.0005;
+      this.planetArray[i].angle = (this.planetArray[i].angle > 360) ? 0 : this.planetArray[i].angle + this.planetArray[i].radius/100000;
       this.planetArray[i].mesh.position.x = this.getXYPosition(this.planetArray[i]).positionX;
       this.planetArray[i].mesh.position.z = this.getXYPosition(this.planetArray[i]).positionZ;
     }
