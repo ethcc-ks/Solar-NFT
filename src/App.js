@@ -5,6 +5,15 @@ import OrbitControls from "three-orbitcontrols";
 import {Nav, Navbar} from "react-bootstrap";
 import getWeb3 from "./getWeb3";
 import LendingPopup from "./Component/LendingPopup"
+import NFTLoader from "./Component/NFTLoader"
+import NFTplanet from "./contracts/NFTplanet.json";
+import axios from 'axios';
+import querystring from 'querystring';
+import dotenv from 'dotenv';
+import { NFTStorage, File } from 'nft.storage'
+
+
+
 
 class ThreeScene extends Component {
 
@@ -21,7 +30,9 @@ class ThreeScene extends Component {
       balance: null,
       accounts: null,
       web3: null,
-      showPopup: false
+      showPopup: false,
+      showNFTLoader: true,
+      contract: null
     };
 
     this.planetArray = [];
@@ -35,6 +46,8 @@ class ThreeScene extends Component {
     this.onMouseClick = this.onMouseClick.bind(this);
     this.start = this.start.bind(this);
     this.closePopup = this.closePopup.bind(this);
+    this.closeLoader = this.closeLoader.bind(this);
+    this.createNFTPlanet = this.createNFTPlanet.bind(this);
   }
 
   updateDimensions = () => {
@@ -42,6 +55,12 @@ class ThreeScene extends Component {
   };
 
   closePopup=()=> {
+    this.setState({
+      showPopup: false
+    });
+  }
+
+  closeLoader=()=> {
     this.setState({
       showPopup: false
     });
@@ -59,16 +78,16 @@ class ThreeScene extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-   /*   console.log(DynamicCollateralLending.networks);
-      const deployedNetwork = DynamicCollateralLending.networks[networkId];
+      console.log(NFTplanet.networks);
+      const deployedNetwork = NFTplanet.networks[networkId];
       console.log("deployedNetwork",deployedNetwork);
 
       const instance = new web3.eth.Contract(
-          DynamicCollateralLending.abi,
+          NFTplanet.abi,
           deployedNetwork && deployedNetwork.address,
       );
 
-      this.state.contract = instance;*/
+      this.state.contract = instance;
 
       this.state.balance = await web3.utils.fromWei(await web3.eth.getBalance(accounts[0]), 'ether');
 
@@ -214,6 +233,26 @@ class ThreeScene extends Component {
     return 100*Math.log(Math.floor(Math.random() * (max - min + 1)) + min);
   }
 
+  createNFTPlanet = async (NFTName, NFTDescription, NFTFile) => {
+
+    const apiKey = process.env.API_NFT_STORAGE_KEY.toLowerCase();
+    const client = new NFTStorage({token: apiKey})
+
+    const metadata = await client.store({
+      name: NFTName,
+      description: NFTDescription,
+      image: NFTFile
+    });
+    console.log(metadata.url);
+   /* await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
+        .send({from: this.state.accounts[0]})
+        .then(res => {
+          console.log('Success', res);
+          alert(`You have successfully created an ${NFTName} NFT!`)
+        })
+        .catch(err => console.log(err));*/
+  }
+
 
   onMouseMove( event ) {
 
@@ -320,6 +359,13 @@ class ThreeScene extends Component {
                 <LendingPopup
                     handleLend={this.handleLend}
                     closePopup={this.closePopup}
+                />
+                : null
+            }
+            {this.state.showNFTLoader ?
+                <NFTLoader
+                    createNFTPlanet={this.createNFTPlanet}
+                    closePopup={this.closeLoader}
                 />
                 : null
             }
