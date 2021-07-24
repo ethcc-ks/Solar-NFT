@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract PlanetNFT is ERC721URIStorage {
     using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    Counters.Counter public _tokenIds;
 
     struct Planet {
 
@@ -15,7 +15,7 @@ contract PlanetNFT is ERC721URIStorage {
 
     constructor() ERC721("PlanetNFT", "PNFT") {}
 
-    function mintPlanet(address player, string memory tokenURI) externals public returns (uint256 tokenID)
+    function mintPlanet(address player, string memory tokenURI) public returns (uint256 tokenID)
     {
         _tokenIds.increment();
 
@@ -29,7 +29,7 @@ contract PlanetNFT is ERC721URIStorage {
     }
 
 
-    function getParam() externals public returns (uint256 r, uint256 p, uint256 a)
+    function getParam()  public returns (uint256 r, uint256 p, uint256 a)
     {
         
          r = 21;
@@ -38,7 +38,7 @@ contract PlanetNFT is ERC721URIStorage {
 
     }
 
-    function updatePosition (address player, uint256 _tokenID) externals public returns (uint256 r, uint256 p, uint256 a){
+    function updatePosition (address player, uint256 _tokenID) public returns (uint256 r, uint256 p, uint256 a){
     {
 
     }
