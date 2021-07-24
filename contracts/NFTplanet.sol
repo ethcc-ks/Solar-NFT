@@ -67,7 +67,7 @@ contract NFTplanet is ERC721URIStorage {
     }
 
 
-    function getParam() public view returns (uint256 r, uint256 p, uint256 a)
+    function getParam() public pure returns (uint256 r, uint256 p, uint256 a)
     {
         r = 21;
         p = 0;
