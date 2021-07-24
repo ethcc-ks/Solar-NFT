@@ -34,16 +34,6 @@ contract PlanetReact is NFTplanet{
         }
     }
 
-    /// @notice for change the look of the canvas
-    function removeNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId) public onlyPlanetOwner(planetId) {
-        Planet storage currentPlanet = allPlanets[planetId];
-        for (uint256 index = 0; index < currentPlanet.allNfts.length; index++) {
-            if(currentPlanet.allNfts[index].contractAddress == address(nftContract) && currentPlanet.allNfts[index].id == tokenId){
-                currentPlanet.allNfts[index].contractAddress=address(0);
-                break;
-            }
-        }
-    }
 
     /// @notice after winning a game we have the choice to add slot +1
     function addSlot(uint256 planetId) private{
