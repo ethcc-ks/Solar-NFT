@@ -9,17 +9,18 @@ contract PlanetReact is NFTplanet{
     
     constructor()public NFTplanet(){  }
 
-    /// @change the position of the planet
+    // change the position of the planet
     function move(uint256 planetId, uint256 _p, uint256 _r, uint256 _a) public {
-        Planet storage currentPlanet = AllPlanets[planetId].a;
+        Planet storage currentPlanet = allPlanets[planetId];
         currentPlanet.a = _a;
         currentPlanet.p = _p;
         currentPlanet.r = _r;
     }
 
     /// @notice add an NFT in the planet canvas (5 available)
-    function addNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId){
+    function addNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId) public{
         require(msg.sender==nftContract.ownerOf(tokenId));
+        Planet storage currentPlanet = allPlanets[planetId];
         
     }
 

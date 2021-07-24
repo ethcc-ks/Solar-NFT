@@ -9,7 +9,7 @@ contract PlanetNFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter public totalPlanets;
     mapping (address => uint256[]) planetsIds;
-    mapping(uint256 => Planet) allPlanets;
+    mapping(uint256 => Planet) public allPlanets;
     event NewPlanet(uint256 id);
 
     struct Planet {
@@ -29,7 +29,7 @@ contract PlanetNFT is ERC721URIStorage {
 
     constructor() ERC721("PlanetNFT", "PNFT") {}
 
-    function mintPlanet(address player, string memory tokenURI, string name) public returns (uint256)
+    function mintPlanet(address player, string memory tokenURI, string memory name) public returns (uint256)
     {   
         uint256 r;
         uint256 p;
@@ -41,7 +41,7 @@ contract PlanetNFT is ERC721URIStorage {
 
         _mint(player, newPlanetId);
 
-        uint256[] allIds =  planetIds[msg.sender];
+        uint256[] storage allIds =  planetsIds[msg.sender];
         allIds.push(newPlanetId);
 
         _setTokenURI(newPlanetId, tokenURI);
@@ -50,14 +50,15 @@ contract PlanetNFT is ERC721URIStorage {
 
         (r, p, a) = getParam();
 
-        Planet.name = name;
-        Planet.r = r;
-        Planet.p = p;
-        Planet.a = a;
-        Planet.planetId = newPlanetId;
-        Planet.owner = player;
-        Planet.allNfts[5];
-
+        Planet memory newPlanet;
+        newPlanet.name = name;
+        newPlanet.r = r;
+        newPlanet.p = p;
+        newPlanet.a = a;
+        newPlanet.PlanetId = newPlanetId;
+        newPlanet.owner = player;
+        newPlanet.allNfts[5];
+        allPlanets[newPlanetId]= newPlanet;
 
         return newPlanetId;
     }
