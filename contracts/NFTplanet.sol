@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract PlanetNFT is ERC721URIStorage {
+contract NFTplanet is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter public totalPlanets;
     mapping (address => uint256[]) planetsIds;
@@ -57,7 +57,8 @@ contract PlanetNFT is ERC721URIStorage {
         newPlanet.a = a;
         newPlanet.PlanetId = newPlanetId;
         newPlanet.owner = player;
-        newPlanet.allNfts[5];
+        newPlanet.allNfts = new NftArt[](5);
+
         allPlanets[newPlanetId]= newPlanet;
 
         return newPlanetId;

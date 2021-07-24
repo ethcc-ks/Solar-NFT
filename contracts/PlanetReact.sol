@@ -21,7 +21,11 @@ contract PlanetReact is NFTplanet{
     function addNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId) public{
         require(msg.sender==nftContract.ownerOf(tokenId));
         Planet storage currentPlanet = allPlanets[planetId];
-        
+        for (uint256 index = 0; index < currentPlanet.allNfts.length; index++) {
+            if(currentPlanet.allNfts[index].contractAddress != address(0)){
+
+            }
+        }
     }
 
     /// @notice for change the look of the canvas
