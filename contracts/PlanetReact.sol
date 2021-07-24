@@ -46,8 +46,9 @@ contract PlanetReact is NFTplanet{
     }
 
     /// @notice after winning a game we have the choice to add slot +1
-    function addSlot() private{
-        
+    function addSlot(uint256 planetId) private{
+        Planet storage currentPlanet = allPlanets[planetId];
+        currentPlanet.allNfts.push();
     }
 
     /// @notice trasnfer planets or nft's

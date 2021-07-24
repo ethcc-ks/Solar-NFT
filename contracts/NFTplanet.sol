@@ -19,6 +19,7 @@ contract NFTplanet is ERC721URIStorage {
         uint256 a;
         uint256 PlanetId;
         address owner;
+        uint256 slots;
         NftArt[] allNfts;
     }
     
@@ -57,7 +58,8 @@ contract NFTplanet is ERC721URIStorage {
         newPlanet.a = a;
         newPlanet.PlanetId = newPlanetId;
         newPlanet.owner = msg.sender;
-        newPlanet.allNfts = new NftArt[](5);
+        newPlanet.slots =5;
+        newPlanet.allNfts= new NftArt[](5);
 
         allPlanets[newPlanetId]= newPlanet;
 
