@@ -13,7 +13,7 @@ contract NFTplanet is ERC721URIStorage {
     mapping(uint256 => Planet) public allPlanets;
     mapping(address => bool) POHOwner;
     event NewPlanet(uint256 id);
-    address public constant POH_ADDRESS = 0xC5E9dDebb09Cd64DfaCab4011A0D5cEDaf7c9BDb; // ETH mainnet
+    address public constant POH_ADDRESS = 0x9b1590A4D36255b3b18Bb681062FD159f809009f; // ETH ropsten
     ProofOfHumanity proofContract;
 
     struct Planet {
