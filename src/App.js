@@ -22,6 +22,7 @@ class ThreeScene extends Component {
     this.getRandomLogInt = this.getRandomLogInt.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseClick = this.onMouseClick.bind(this);
+    this.start = this.start.bind(this);
   }
 
   updateDimensions = () => {
@@ -96,6 +97,9 @@ class ThreeScene extends Component {
 
     window.addEventListener('resize', this.updateDimensions);
     window.addEventListener( 'mousemove', this.onMouseMove, false );
+
+
+
   }
 
   createSphere(radius) {
@@ -110,12 +114,13 @@ class ThreeScene extends Component {
         radius: radius,
         angle:  Math.random() * 360
       }
-      this.addPlanet(planet);
 
       const posXY = this.getXYPosition(planet);
       cubeMesh.position.x = posXY.positionX;
       cubeMesh.position.z = posXY.positionZ;
-      cubeMesh.position.y = 0
+      cubeMesh.position.y = 0;
+      planet.mesh = cubeMesh;
+      this.addPlanet(planet);
 
       cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
@@ -126,7 +131,11 @@ class ThreeScene extends Component {
       cubeMesh.scale.y = scale;
       cubeMesh.scale.z = scale;
 
-      this.scene.add(cubeMesh);
+    cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
+    cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
+    cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
+
+    this.scene.add(cubeMesh);
   }
 
   addPlanet = (planet) => {
@@ -173,18 +182,37 @@ class ThreeScene extends Component {
 
   start = () => {
     if (!this.frameId) {
-      this.frameId = requestAnimationFrame(this.animate);}
+      this.frameId = requestAnimationFrame(this.animate);
+    }
   };
   stop = () => {
     cancelAnimationFrame(this.frameId);
   };
   animate = () => {
-//Animate Models Here
-//ReDraw Scene with Camera and Scene Object
+    console.log('planets ' + this.state.planets);
+  //Animate Models Here
+  //ReDraw Scene with Camera and Scene Object
+    for (let planet of Object.keys(this.state.planets)) {
+      let currentPlanet = this.state.planets[planet];
+
+      //console.log(planet);
+      /*currentPlanet.radial.angle++;
+      currentPlanet.position.x = this.getXYPosition(currentPlanet.radial).positionX;
+      currentPlanet.position.z = this.getXYPosition(currentPlanet.radial).positionZ;*/
+    }
+
+    Object.entries(this.state.planets).forEach(
+        ([key, value]) => {
+          if (key==='radial')
+            console.log(key, value)
+        }
+    );
+
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
 
   };
+
   renderScene = () => {
       // update the picking ray with the camera and mouse position
     this.state.raycaster.setFromCamera( this.mouse, this.camera );
