@@ -2,21 +2,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "contract/NFTplanet.sol"
+import "./NFTplanet.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract PlanetReact {
+contract PlanetReact is NFTplanet{
     
+    constructor()public NFTplanet(){  }
 
     /// @change the position of the planet
-    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
-    /// @return Documents the return variables of a contract’s function state variable
-    function move() public returns {}
+    function move(uint256 planetId, uint256 _p, uint256 _r, uint256 _a) public {
+        Planet storage currentPlanet = AllPlanets[planetId].a;
+        currentPlanet.a = _a;
+        currentPlanet.p = _p;
+        currentPlanet.r = _r;
+    }
 
     /// @notice add an NFT in the planet canvas (5 available)
-    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
-    /// @return Documents the return variables of a contract’s function state variable
-    function addNFT(){
-        require(condition);
+    function addNFT(ERC721 nftContract, uint256 tokenId, uint256 planetId){
+        require(msg.sender==nftContract.ownerOf(tokenId));
+        
     }
 
     /// @notice for change the look of the canvas
