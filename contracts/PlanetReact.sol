@@ -7,51 +7,61 @@ import "contract/NFTplanet.sol"
 contract PlanetReact {
     
 
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details
+    /// @change the position of the planet
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
     /// @return Documents the return variables of a contract’s function state variable
-    /// @inheritdoc	Copies all missing tags from the base function (must be followed by the contract name)
     function move() public returns {}
 
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details
+    /// @notice add an NFT in the planet canvas (5 available)
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
     /// @return Documents the return variables of a contract’s function state variable
-    /// @inheritdoc	Copies all missing tags from the base function (must be followed by the contract name)
     function addNFT(){
         require(condition);
     }
 
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details
+    /// @notice for change the look of the canvas
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
     /// @return Documents the return variables of a contract’s function state variable
-    /// @inheritdoc	Copies all missing tags from the base function (must be followed by the contract name)
     function removeNFT() public {}
 
-    /// @notice Explain to an end user what this does
+    /// @notice after winning a game we have the choice to add slot +1
     /// @dev Explain to a developer any extra details
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
-    /// @return Documents the return variables of a contract’s function state variable
-    /// @inheritdoc	Copies all missing tags from the base function (must be followed by the contract name)
-    function addSlot() {}
+    function addSlot() {
+        require(condition);
+    }
 
-    /// @notice Explain to an end user what this does
+    /// @notice trasnfer planets or nft's
     /// @dev Explain to a developer any extra details
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
     /// @return Documents the return variables of a contract’s function state variable
-    /// @inheritdoc	Copies all missing tags from the base function (must be followed by the contract name)
     function transfer() {}
 
-    function removeslot(){}
+    /// @notice remove the nft inside and the slot 
+    /// @dev Explain to a developer any extra details
+    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
+    function removeSlot(){}
 
+    /// @notice decalre a war to another user that have all of his 5 slots 
+    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
+    /// @return Documents the return variables of a contract’s function state variable
     function declareWar() {}
 
+    /// @notice decline 
+    /// @dev Explain to a developer any extra details
+    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
+    /// @return Documents the return variables of a contract’s function state variable
     function declineWar() {}
 
+    /// @notice accept
+    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
+    /// @return Documents the return variables of a contract’s function state variable
     function acceptWar() {}
 
+    /// @notice give the choice of add slot and make his planet bigger or have a new planet randomly created
+    /// @dev Explain to a developer any extra details
+    /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
+    /// @return Documents the return variables of a contract’s function state variable
     function choice() {}
 }
 
