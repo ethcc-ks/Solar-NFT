@@ -22,6 +22,8 @@ class ThreeScene extends Component {
       web3: null,
     };
 
+    this.planetArray = [];
+
     this.mouse = new THREE.Vector2();
 
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -181,6 +183,8 @@ class ThreeScene extends Component {
   addPlanet = (planet) => {
     const planets = this.state.planets.slice();
     planets.push(planet);
+    const planetArray = this.state.planets.slice();
+    this.planetArray.push(planet);
     this.setState({planets: planet}, () => {
       // console.log(this.state.planets);
     });
@@ -240,24 +244,13 @@ class ThreeScene extends Component {
     cancelAnimationFrame(this.frameId);
   };
   animate = () => {
-    console.log('planets ' + this.state.planets);
-  //Animate Models Here
-  //ReDraw Scene with Camera and Scene Object
-    /*for (let planet of Object.keys(this.state.planets)) {
-      let currentPlanet = this.state.planets[planet];
+    for (let i = 0; i < this.planetArray.length; i++) {
+      let planet = this.planetArray[i]
 
-      //console.log(planet);
-      /!*currentPlanet.radial.angle++;
-      currentPlanet.position.x = this.getXYPosition(currentPlanet.radial).positionX;
-      currentPlanet.position.z = this.getXYPosition(currentPlanet.radial).positionZ;*!/
+      this.planetArray[i].angle = (this.planetArray[i].angle > 360) ? 0 : this.planetArray[i].angle + 0.0005;
+      this.planetArray[i].mesh.position.x = this.getXYPosition(this.planetArray[i]).positionX;
+      this.planetArray[i].mesh.position.z = this.getXYPosition(this.planetArray[i]).positionZ;
     }
-
-    Object.entries(this.state.planets).forEach(
-        ([key, value]) => {
-          if (key==='radial')
-            console.log(key, value)
-        }
-    );*/
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
