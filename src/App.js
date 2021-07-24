@@ -193,7 +193,7 @@ class ThreeScene extends Component {
       cubeMesh.position.z = posXY.positionZ;
       cubeMesh.position.y = 0;
       planet.mesh = cubeMesh;
-      //this.addPlanet(planet);
+      this.addPlanet(planet);
 
       cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
@@ -212,9 +212,6 @@ class ThreeScene extends Component {
   }
 
   addPlanet = (planet) => {
-    const planets = this.state.planets.slice();
-    planets.push(planet);
-    const planetArray = this.state.planets.slice();
     this.planetArray.push(planet);
     this.setState({planets: planet}, () => {
       // console.log(this.state.planets);
