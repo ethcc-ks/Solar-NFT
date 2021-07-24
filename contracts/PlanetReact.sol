@@ -50,7 +50,7 @@ contract PlanetReact is NFTplanet{
         Planet storage currentPlanet = allPlanets[planetId];
         currentPlanet.allNfts.push();
     }
-
+/*
     /// @notice trasnfer planets or nft's
     /// @dev Explain to a developer any extra details
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
@@ -83,5 +83,6 @@ contract PlanetReact is NFTplanet{
     /// @param Documents a parameter just like in doxygen (must be followed by parameter name)
     /// @return Documents the return variables of a contract’s function state variable
     function choice() {}
+    */
 }
 
