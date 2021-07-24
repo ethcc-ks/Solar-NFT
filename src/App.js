@@ -15,6 +15,8 @@ class ThreeScene extends Component {
     this.updateDimensions = this.updateDimensions.bind(this);
     this.getXYPosition = this.getXYPosition.bind(this);
     this.getRandomLogInt = this.getRandomLogInt.bind(this);
+    this.pointer = new THREE.Vector2();
+    this.raycaster = new THREE.Raycaster();
   }
 
   updateDimensions = () => {
@@ -87,11 +89,6 @@ class ThreeScene extends Component {
     this.start();
 
     window.addEventListener('resize', this.updateDimensions);
-
-    setInterval(() => {
-
-    }, 300);
-
   }
 
   createSphere(radius) {
@@ -116,10 +113,19 @@ class ThreeScene extends Component {
       cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
+      
+      const scale = Math.random() + 0.5;
+      cubeMesh.scale.x = scale;
+      cubeMesh.scale.y = scale;
+      cubeMesh.scale.z = scale;
 
-      cubeMesh.scale.x = Math.random() + 0.5;
-      cubeMesh.scale.y = Math.random() + 0.5;
-      cubeMesh.scale.z = Math.random() + 0.5;
+      // this.scene.domElement.addEventListener("click", event => {
+      //   this.raycaster.setFromCamera( this.pointer, this.camera );
+      //   const intersects = this.raycaster.intersectObjects( this.scene.children );
+      //   if ( intersects.length > 0 ) {
+      //     console.log('hello')
+      //   }
+      // });
 
       this.scene.add(cubeMesh);
   }
@@ -128,7 +134,7 @@ class ThreeScene extends Component {
     const planets = this.state.planets.slice();
     planets.push(planet);
     this.setState({planets: planet}, () => {
-      console.log(this.state.planets);
+      // console.log(this.state.planets);
     });
   }
 
@@ -139,7 +145,7 @@ class ThreeScene extends Component {
     }
   }
 
-   getRandomLogInt = (min, max) => {
+  getRandomLogInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return 100*Math.log(Math.floor(Math.random() * (max - min + 1)) + min);
@@ -161,40 +167,7 @@ class ThreeScene extends Component {
   renderScene = () => {
     if (this.renderer) this.renderer.render(this.scene, this.camera);
 
-    // let INTERSECTED;
-    
-    // // Raycaster
-    // let raycaster = new THREE.Raycaster();
-
-    // const pointer = new THREE.Vector2();
-    
-
-    // raycaster.setFromCamera( pointer, this.camera );
-
-		// 		const intersects = raycaster.intersectObjects( this.scene.children );
-
-		// 		if ( intersects.length > 0 ) {
-
-		// 			if ( INTERSECTED != intersects[ 0 ].object ) {
-
-		// 				if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-
-    //         console.log('click');
-		// 				INTERSECTED = intersects[ 0 ].object;
-		// 				// INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-		// 				// INTERSECTED.material.emissive.setHex( 0xff0000 );
-
-		// 			}
-
-		// 		} else {
-
-		// 			if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-
-		// 			INTERSECTED = null;
-
-		// 		}
   };
-
   render() {
     return (<div
         ref={mount => { this.mount = mount}}
