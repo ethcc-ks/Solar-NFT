@@ -10,13 +10,13 @@ class ThreeScene extends Component {
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
-      planets: []
+      planets: [],
+      mouse: new THREE.Vector2(),
+      raycaster: new THREE.Raycaster(),
     };
     this.updateDimensions = this.updateDimensions.bind(this);
     this.getXYPosition = this.getXYPosition.bind(this);
     this.getRandomLogInt = this.getRandomLogInt.bind(this);
-    this.pointer = new THREE.Vector2();
-    this.raycaster = new THREE.Raycaster();
   }
 
   updateDimensions = () => {
@@ -89,6 +89,7 @@ class ThreeScene extends Component {
     this.start();
 
     window.addEventListener('resize', this.updateDimensions);
+    window.addEventListener( 'mousemove', this.onMouseMove, false );
   }
 
   createSphere(radius) {
@@ -119,14 +120,6 @@ class ThreeScene extends Component {
       cubeMesh.scale.y = scale;
       cubeMesh.scale.z = scale;
 
-      // this.scene.domElement.addEventListener("click", event => {
-      //   this.raycaster.setFromCamera( this.pointer, this.camera );
-      //   const intersects = this.raycaster.intersectObjects( this.scene.children );
-      //   if ( intersects.length > 0 ) {
-      //     console.log('hello')
-      //   }
-      // });
-
       this.scene.add(cubeMesh);
   }
 
@@ -151,6 +144,38 @@ class ThreeScene extends Component {
     return 100*Math.log(Math.floor(Math.random() * (max - min + 1)) + min);
   }
 
+
+  onMouseMove( event ) {
+
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+
+    let mouse = this.state.mouse;
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    this.setState({mouse: mouse})
+  
+  }
+
+
+  raycast (e) {
+    this.raycaster.setFromCamera( this.mouse, this.camera );  
+    var intersects = this.raycaster.intersectObjects( this.scene.children );
+
+    for ( var i = 0; i < intersects.length; i++ ) {
+      console.log( intersects[ i ] ); 
+      /*
+          An intersection has the following properties :
+              - object : intersected object (THREE.Mesh)
+              - distance : distance from camera to intersection (number)
+              - face : intersected face (THREE.Face3)
+              - faceIndex : intersected face index (number)
+              - point : intersection point (THREE.Vector3)
+              - uv : intersection point in the object's UV coordinates (THREE.Vector2)
+      */
+  }
+  }
+
   start = () => {
     if (!this.frameId) {
       this.frameId = requestAnimationFrame(this.animate);}
@@ -163,8 +188,20 @@ class ThreeScene extends Component {
 //ReDraw Scene with Camera and Scene Object
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
+
   };
   renderScene = () => {
+
+      // update the picking ray with the camera and mouse position
+    this.state.raycaster.setFromCamera( this.state.mouse, this.camera );
+
+    // calculate objects intersecting the picking ray
+    const intersects = this.state.raycaster.intersectObjects( this.scene.children );
+
+    for ( let i = 0; i < intersects.length; i ++ ) {
+      intersects[ i ].object.material.color.set( 0xff0000 );
+    }
+
     if (this.renderer) this.renderer.render(this.scene, this.camera);
 
   };
