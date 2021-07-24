@@ -4,6 +4,7 @@ import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 import OrbitControls from "three-orbitcontrols";
 import {Nav, Navbar} from "react-bootstrap";
 import getWeb3 from "./getWeb3";
+import LendingPopup from "./Component/LendingPopup"
 
 class ThreeScene extends Component {
 
@@ -20,6 +21,7 @@ class ThreeScene extends Component {
       balance: null,
       accounts: null,
       web3: null,
+      showPopup: false
     };
 
     this.mouse = new THREE.Vector2();
@@ -30,11 +32,18 @@ class ThreeScene extends Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseClick = this.onMouseClick.bind(this);
     this.start = this.start.bind(this);
+    this.closePopup = this.closePopup.bind(this);
   }
 
   updateDimensions = () => {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   };
+
+  closePopup=()=> {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
 
   async componentDidMount() {
 
@@ -140,6 +149,8 @@ class ThreeScene extends Component {
     window.addEventListener( 'mousemove', this.onMouseMove, false );
 
     window.addEventListener( 'click', this.onMouseClick, false );
+    this.setState({showPopup : true})
+
   }
 
   createSphere(radius) {
@@ -214,15 +225,17 @@ class ThreeScene extends Component {
 
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
+    this.setState({showpopup: true});
+
     let mouse = this.mouse;
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     this.setState({mouse: mouse})
 
     if (this.state.intersected !== null) {
-          this.setState({isSelected: true}, () => {
-            console.log(this.state.isSelected);
-          });
+      this.setState({isSelected: true}, () => {
+        console.log(this.state.isSelected);
+      });
     } else {
       this.setState({isSelected: false}, () => {
         console.log(this.state.isSelected);
@@ -309,6 +322,13 @@ class ThreeScene extends Component {
               this.mount = mount
             }}
             />
+            {this.state.showPopup ?
+                <LendingPopup
+                    handleLend={this.handleLend}
+                    closePopup={this.closePopup}
+                />
+                : null
+            }
           </div>
       )
     }
