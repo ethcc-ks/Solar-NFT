@@ -11,15 +11,14 @@ contract NFTplanet is ERC721URIStorage {
     mapping (address => uint256[]) planetsIds;
     mapping(uint256 => Planet) public allPlanets;
     event NewPlanet(uint256 id);
+     
 
     struct Planet {
         string name;
-        uint256 p;
-        uint256 r;
-        uint256 a;
         uint256 PlanetId;
         address owner;
         uint256 slots;
+        uint256 nftCounter;
         NftArt[] allNfts;
     }
     
@@ -32,9 +31,6 @@ contract NFTplanet is ERC721URIStorage {
 
     function mintPlanet(string memory tokenURI, string memory name) public returns (uint256)
     {   
-        uint256 r;
-        uint256 p;
-        uint256 a;
         uint256 newPlanetId = totalPlanets.current();
 
 
@@ -49,30 +45,16 @@ contract NFTplanet is ERC721URIStorage {
 
         emit NewPlanet(newPlanetId);
 
-        (r, p, a) = getParam();
-
-        Planet memory newPlanet;
+        Planet storage newPlanet = allPlanets[newPlanetId];
         newPlanet.name = name;
-        newPlanet.r = r;
-        newPlanet.p = p;
-        newPlanet.a = a;
         newPlanet.PlanetId = newPlanetId;
         newPlanet.owner = msg.sender;
         newPlanet.slots =5;
-        newPlanet.allNfts= new NftArt[](5);
-
-        allPlanets[newPlanetId]= newPlanet;
+        newPlanet.nftCounter=0;
 
         return newPlanetId;
     }
 
-
-    function getParam() public pure returns (uint256 r, uint256 p, uint256 a)
-    {
-        r = 21;
-        p = 0;
-        a = 2;
-    }
 
 
 
