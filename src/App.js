@@ -4,8 +4,8 @@ import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 import OrbitControls from "three-orbitcontrols";
 class ThreeScene extends Component {
   componentDidMount() {
-    const width = this.mount.clientWidth;
-    const height = this.mount.clientHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
     this.scene = new THREE.Scene();
     //Add Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -30,18 +30,9 @@ class ThreeScene extends Component {
     this.scene.add(lights[1]);
     this.scene.add(lights[2]);
     //ADD Your 3D Models here
-    const cubeGeometry = new THREE.SphereGeometry(5);
+    const cubeGeometry = new THREE.SphereGeometry(3);
     const material = new THREE.MeshBasicMaterial({
       color: '#6ab056',
-      wireframe: true
-    });
-    this.cubeMesh = new THREE.Mesh(cubeGeometry, material);
-    this.scene.add(this.cubeMesh);
-
-
-    const cubeGeometryNext = new THREE.SphereGeometry(2);
-    const materialNext = new THREE.MeshBasicMaterial({
-      color: '#6ah016',
       wireframe: true
     });
     this.cubeMesh = new THREE.Mesh(cubeGeometry, material);
@@ -71,7 +62,7 @@ class ThreeScene extends Component {
 
   render() {
     return (<div
-        style={{ width: "800px", height: "800px" }}
+        style={{ width: '100%', height: "800px" }}
         ref={mount => { this.mount = mount}}
     />)
   }}
