@@ -22,9 +22,7 @@ export function handleNFTadded(event: NFTaddedEvent): void {
   let token = NFTInPlanet.load(event.params.planetId.toString());
   if (!token) {
     token = new NFTInPlanet(event.params.planetId.toString());
-    token.from = event.transaction.from.toHexString();
-    token.to = event.transaction.to.toHexString();
-    token.tokenId = event.params.planetId;
+
   }
   token.save();
 }

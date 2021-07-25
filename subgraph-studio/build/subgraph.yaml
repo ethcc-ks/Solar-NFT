@@ -22,4 +22,6 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: NewPlanet(uint256,uint256)
+          handler: handleNewPlanet
       file: PlanetReact/PlanetReact.wasm
