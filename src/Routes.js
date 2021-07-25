@@ -18,8 +18,7 @@ function Routes() {
 */}
             </Route>
             <Route path="/play">
-                <ThreeScene web3={this.state.web3} accounts={this.state.accounts}
-                            contract={this.state.contract} balance={this.state.balance}/>
+                <ThreeScene />
             </Route>
             <Route path="/">
                 {/*
