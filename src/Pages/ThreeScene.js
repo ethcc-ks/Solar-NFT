@@ -151,10 +151,6 @@ class ThreeScene extends Component {
       const ellipse = new THREE.Line( geometry3, material3 );
       this.scene.add(ellipse);
     }
-    for ( let i = 0; i < 100; i ++ ) {
-      let radius = this.getRandomLogInt(2, 5);
-      this.createSphere(radius)
-    }
     this.renderScene();
     //start animation
     this.start();
@@ -167,7 +163,7 @@ class ThreeScene extends Component {
 
   }
 
-  createSphere(radius) {
+  createSphere(radius, planetID) {
       const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
       const material = new THREE.MeshBasicMaterial({
           color: '#6ab056',
@@ -178,6 +174,7 @@ class ThreeScene extends Component {
       let planet = {
         radius: radius,
         angle:  Math.random() * 360,
+        id: planetID
       }
 
       const posXY = this.getXYPosition(planet);
@@ -237,18 +234,30 @@ class ThreeScene extends Component {
     });
     console.log(metadata.url);
 
-    this.state.contract.methods.mintPlanet(metadata.url, NFTName)
+    const mintedPlanet = await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
         .send({from: this.state.accounts[0], value: 0.01*10**18})
         .then(res => {
           const IDPlanet = res.events.NewPlanet.returnValues.id;
-          console.log(IDPlanet);
           console.log('Success', res);
-          alert('You have successfully created a new NFT! His ID : ' + IDPlanet)
-          
+          alert('You have successfully created a new NFT! ID : ' + IDPlanet)
+
+          let radius = this.getRandomLogInt(2, 5);
+          this.createSphere(radius, IDPlanet);
+
+          return IDPlanet;
         })
         .catch(err => console.log(err));
+
+    console.log(mintedPlanet)
   }
 
+  async fetchNFT (contractAddress, tokenID) {
+    const req = await axios.get(`https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenID}`)
+        .then(function(response) {
+            return response
+        })
+    return {contract: req.data.asset_contract.address, image: req.data.asset_contract.image_url, name: req.data.name, owner: req.data.owner.address, tokenID: req.data.token_id};
+  }
 
   onMouseMove( event ) {
 
@@ -372,6 +381,7 @@ class ThreeScene extends Component {
                 <LendingPopup
                     handleLend={this.handleLend}
                     closePopup={this.closePopup}
+                    planetID={this.intersected}
                 />
                 : null
             }
