@@ -12,7 +12,7 @@ contract NFTplanet is ERC721URIStorage {
     mapping (address => uint256[]) planetsIds;
     mapping(uint256 => Planet) public allPlanets;
     mapping(address => bool) POHOwner;
-    event NewPlanet(uint256 id);
+    event NewPlanet(uint256 id, uint nbSlots);
     address public constant POH_ADDRESS = 0x9b1590A4D36255b3b18Bb681062FD159f809009f; // ETH ropsten
     ProofOfHumanity proofContract;
 
@@ -50,13 +50,13 @@ contract NFTplanet is ERC721URIStorage {
 
             _setTokenURI(newPlanetId, tokenURI);
 
-            emit NewPlanet(newPlanetId);
-
             Planet storage newPlanet = allPlanets[newPlanetId];
             newPlanet.name = name;
             newPlanet.PlanetId = newPlanetId;
             newPlanet.owner = msg.sender;
             newPlanet.slots =5;
+            emit NewPlanet(newPlanetId, newPlanet.slots);
+
             newPlanet.nftCounter=0;
         }else if(msg.value>= 0.0001 ether){
            uint256 newPlanetId = totalPlanets.current();
@@ -70,13 +70,14 @@ contract NFTplanet is ERC721URIStorage {
 
             _setTokenURI(newPlanetId, tokenURI);
 
-            emit NewPlanet(newPlanetId);
 
             Planet storage newPlanet = allPlanets[newPlanetId];
             newPlanet.name = name;
             newPlanet.PlanetId = newPlanetId;
             newPlanet.owner = msg.sender;
             newPlanet.slots =5;
+            emit NewPlanet(newPlanetId, newPlanet.slots);
+
             newPlanet.nftCounter=0;
         }
         
