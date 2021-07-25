@@ -62,7 +62,7 @@ class ThreeScene extends Component {
 
   closeLoader=()=> {
     this.setState({
-      showPopup: false
+      showNFTLoader: false
     });
   }
 
@@ -270,7 +270,7 @@ class ThreeScene extends Component {
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     this.setState({mouse: mouse})
 
-    if (this.intersected !== null) {
+    if (this.state.intersected !== null) {
       this.setState({isSelected: true}, () => {
         console.log(this.state.isSelected);
         this.setState({showPopup : true})
@@ -294,7 +294,6 @@ class ThreeScene extends Component {
   };
   animate = () => {
     for (let i = 0; i < this.planetArray.length; i++) {
-      let planet = this.planetArray[i]
 
       this.planetArray[i].angle = (this.planetArray[i].angle > 360) ? 0 : this.planetArray[i].angle + this.planetArray[i].radius/100000;
       this.planetArray[i].mesh.position.x = this.getXYPosition(this.planetArray[i]).positionX;
@@ -358,9 +357,6 @@ class ThreeScene extends Component {
 
     if (this.renderer) this.renderer.render(this.scene, this.camera);
 
-    console.log(this.camera.position);
-    console.log('rotation ' + this.camera.rotation);
-
   };
   render() {
       return (
@@ -379,7 +375,7 @@ class ThreeScene extends Component {
             {this.state.showNFTLoader ?
                 <NFTLoader
                     createNFTPlanet={this.createNFTPlanet}
-                    closePopup={this.closeLoader}
+                    closeLoader={this.closeLoader}
                 />
                 : null
             }

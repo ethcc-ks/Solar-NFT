@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import getWeb3 from "./getWeb3";
 import NFTPlanet from "./contracts/NFTplanet.json";
-import * as THREE from "three";
 import { Nav, Navbar } from "react-bootstrap";
 import Routes from "./Routes";
 import BlockchainContext from "./context/BlockchainContext";
