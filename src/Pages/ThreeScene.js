@@ -176,7 +176,7 @@ class ThreeScene extends Component {
     console.log(planetID)
     const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
     const material = new THREE.MeshBasicMaterial({
-      color: '#6ab056',
+      color: "#"+ Math.floor(Math.random()*16777215).toString(16),
       wireframe: true
     });
     let cubeMesh = new THREE.Mesh(cubeGeometry, material);
