@@ -6,5 +6,5 @@ Are you a player that likes arts ? A NFT collectors ? Our games is there for you
   run `npm install`
   
 # Run
-  run `npm start
+  run `npm start`
   
