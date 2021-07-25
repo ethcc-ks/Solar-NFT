@@ -240,8 +240,11 @@ class ThreeScene extends Component {
     this.state.contract.methods.mintPlanet(metadata.url, NFTName)
         .send({from: this.state.accounts[0], value: 0.01*10**18})
         .then(res => {
+          const IDPlanet = res.events.NewPlanet.returnValues.id;
+          console.log(IDPlanet);
           console.log('Success', res);
-          alert(`You have successfully created an ${NFTName} NFT!`)
+          alert('You have successfully created a new NFT! His ID : ' + IDPlanet)
+          
         })
         .catch(err => console.log(err));
   }
