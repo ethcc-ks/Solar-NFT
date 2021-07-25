@@ -26,21 +26,13 @@ class LendingPopup extends Component {
 
     render() {
         return (
-            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto'}}>
+            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto', right: 0}}>
                 <div className='popup_inner'>
                     <Modal.Dialog centered>
                         <Modal.Header>
                             <Modal.Title>You are on the {this.props.planetID} planet</Modal.Title>
                         </Modal.Header>
-                        <Form>
-                            <Form.Group controlId="formBasicText">
-
-                                <Form.Label>Explore more...</Form.Label>
-                                <Form.Control type="number" value={this.state.amountToLend} placeholder="1" onChange={this.handleLendingAmount} />
-                            </Form.Group>
-                        </Form>
                         <div>
-                            <Button variant="primary" style={{ margin: "10px" }} onClick={this.handleSubmission}>Lend</Button>
                             <Button variant="secondary" style={{ margin: "10px" }} onClick={this.props.closePopup}>Close</Button>
                             
                         </div>
