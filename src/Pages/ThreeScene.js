@@ -324,15 +324,23 @@ class ThreeScene extends Component {
   queryGraph = () => {
     const APIURL = "https://gateway.thegraph.com/api/<API_KEY>/subgraphs/id/<SUBGRAPH_ID>\nx";
 
-    const tokensQuery = `
+    const planetNFT = `
   query {
-    tokens {
+    newplanets {
       id
-      tokenID
-      contentURI
-      metadataURI
+      nbSlots
     }
   }
+` 
+const NFTinPlanet =`
+query {
+  nftaddeds {
+    planetid
+    owner
+    nftaddress
+    nftid
+  }
+}
 `
 
     const client = new ApolloClient({
@@ -341,10 +349,17 @@ class ThreeScene extends Component {
     });
 
     client.query({
-      query: gql(tokensQuery)
+      query: gql(planetNFT)
     })
         .then(data => console.log("Subgraph data: ", data))
         .catch(err => { console.log("Error fetching data: ", err) });
+    
+    client.query({
+      query: gql(NFTinPlanet)
+    })
+        .then(data => console.log("Subgraph data: ", data))
+        .catch(err => { console.log("Error fetching data: ", err) });
+    
   }
 
   renderScene = () => {
