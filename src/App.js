@@ -68,6 +68,9 @@ class App extends Component {
                     <Nav.Link href="/">Home</Nav.Link>
                     <Nav.Link href="/play">Play</Nav.Link>
                     <Nav.Link href="/users">Users</Nav.Link>
+                    <Nav.Link href="/campaign">Campaign</Nav.Link>
+
+
                   </Nav>
 
                   <Navbar.Collapse className='justify-content-end'>

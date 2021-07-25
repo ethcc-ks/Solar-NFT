@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import ThreeScene from "./Pages/ThreeScene";
 import Landing from "./Pages/Landing";
+import Campagne from "./Pages/Campagne";
 
 function Routes() {
     return (
@@ -16,6 +17,9 @@ function Routes() {
             </Route>
             <Route path="/play">
                 <ThreeScene />
+            </Route>
+            <Route path="/campaign">
+                <Campagne />
             </Route>
           
         </Switch>
