@@ -11,6 +11,7 @@ import querystring from 'querystring';
 import dotenv from 'dotenv';
 import { NFTStorage, File } from 'nft.storage'
 import NFTPlanet from './contracts/NFTplanet.json'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
 
 class ThreeScene extends Component {
@@ -20,7 +21,7 @@ class ThreeScene extends Component {
 
     this.state = {
       width: window.innerWidth,
-      height: window.innerHeight-56,
+      height: window.innerHeight,
       planets: [],
       raycaster: new THREE.Raycaster(),
       intersected: null,
@@ -36,6 +37,7 @@ class ThreeScene extends Component {
     this.planetArray = [];
 
     this.mouse = new THREE.Vector2();
+    this.intersected = null;
 
     this.updateDimensions = this.updateDimensions.bind(this);
     this.getXYPosition = this.getXYPosition.bind(this);
@@ -46,6 +48,7 @@ class ThreeScene extends Component {
     this.closePopup = this.closePopup.bind(this);
     this.closeLoader = this.closeLoader.bind(this);
     this.createNFTPlanet = this.createNFTPlanet.bind(this);
+    this.queryGraph = this.queryGraph.bind(this);
   }
 
   updateDimensions = () => {
@@ -114,8 +117,8 @@ class ThreeScene extends Component {
     this.mount.appendChild(this.renderer.domElement);
     //add Camera
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    this.camera.position.z = 8;
-    this.camera.position.y = 5;
+    this.camera.position.z = 98;
+    this.camera.position.y = 62;
     //Camera Controls
     const controls = new OrbitControls(this.camera, this.renderer.domElement);
     //LIGHTS
@@ -137,11 +140,35 @@ class ThreeScene extends Component {
       wireframe: true
     });
     this.cubeMesh = new THREE.Mesh(cubeGeometry, material);
-
     this.cubeMesh.position.x = 36;
     this.cubeMesh.position.y = 0;
     this.scene.add(this.cubeMesh);
 
+
+    const loader = new THREE.FontLoader();
+    loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+      const geometryText = new THREE.TextGeometry( 'Hello three.js!', {
+        font: font,
+        size: 8000,
+        height: 5,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 10,
+        bevelSize: 8,
+        bevelOffset: 0,
+        bevelSegments: 5
+      } );
+      const materialText = new THREE.MeshBasicMaterial({
+        color: '#6ab056'
+      });
+      let textMesh = new THREE.Mesh(geometryText, materialText);
+      textMesh.position.y = 0;
+      textMesh.position.x = 0;
+      textMesh.position.z = 10;
+      this.scene.add(textMesh);
+
+    } );
 
     for ( let i = 2; i < 6; i++) {
       const curve = new THREE.EllipseCurve(
@@ -262,7 +289,10 @@ class ThreeScene extends Component {
     let mouse = this.mouse;
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    this.setState({mouse: mouse})
+    if (this.state.intersected !== null)
+      this.state.intersected.material.color.set(0x6ab056);
+    this.setState({mouse: mouse, intersected: null});
+
   }
 
   onMouseClick( event ) {
@@ -275,7 +305,7 @@ class ThreeScene extends Component {
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     this.setState({mouse: mouse})
 
-    if (this.state.intersected !== null) {
+    if (this.intersected !== null) {
       this.setState({isSelected: true}, () => {
         console.log(this.state.isSelected);
         this.setState({showPopup : true})
@@ -311,6 +341,33 @@ class ThreeScene extends Component {
 
   };
 
+
+  queryGraph = () => {
+    const APIURL = "https://gateway.thegraph.com/api/<API_KEY>/subgraphs/id/<SUBGRAPH_ID>\nx";
+
+    const tokensQuery = `
+  query {
+    tokens {
+      id
+      tokenID
+      contentURI
+      metadataURI
+    }
+  }
+`
+
+    const client = new ApolloClient({
+      uri: APIURL,
+      cache: new InMemoryCache()
+    });
+
+    client.query({
+      query: gql(tokensQuery)
+    })
+        .then(data => console.log("Subgraph data: ", data))
+        .catch(err => { console.log("Error fetching data: ", err) });
+  }
+
   renderScene = () => {
       // update the picking ray with the camera and mouse position
     this.state.raycaster.setFromCamera( this.mouse, this.camera );
@@ -318,18 +375,26 @@ class ThreeScene extends Component {
     // calculate objects intersecting the picking ray
     const intersects = this.state.raycaster.intersectObjects( this.scene.children );
 
-    if ( intersects.length === 1) {
+    if ( intersects.length > 0) {
 
       intersects[0].object.material.color.set(0xff0000);
       this.setState({intersected: intersects[0].object});
-    } else {
-      if (this.state.intersected !== null) {
-        this.state.intersected.material.color.set(0x6ab056);
-      }
-      this.setState({intersected: null});
     }
+   /* if ( intersects.length > 0) {
+
+      intersects[0].object.material.color.set(0xff0000);
+      this.intersected = intersects[0].object;
+    } else {
+      if (this.intersected !== null) {
+        this.intersected.material.color.set(0x6ab056);
+      }
+      this.intersected = null;
+    }*/
 
     if (this.renderer) this.renderer.render(this.scene, this.camera);
+
+    console.log(this.camera.position);
+    console.log('rotation ' + this.camera.rotation);
 
   };
   render() {
@@ -339,7 +404,7 @@ class ThreeScene extends Component {
     else {
       return (
           <div className="App">
-            <Navbar bg="light" variant="light" styled>
+            <Navbar bg="light" variant="light" styled style={{position: 'absolute', top: 0, width: '100vw'}}>
               <Navbar.Brand href="#home">NFT PlanEth</Navbar.Brand>
 
               <Nav className="mr-auto">
