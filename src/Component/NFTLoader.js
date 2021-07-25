@@ -8,7 +8,7 @@ class Popup extends Component {
         super(props);
 
         this.state = {
-            closePopup: this.props.closePopup,
+            closeLoader: this.props.closeLoader,
             selectedFile: null,
             isFilePicked: false,
             NFTName: "name",
@@ -45,7 +45,7 @@ class Popup extends Component {
                         )}
                         <div>
                             <Button variant="primary" style={{ margin: "10px" }} onClick={this.handleSubmission}>Submit</Button>
-                            <Button variant="secondary"  style={{ margin: "10px" }} onClick={this.props.closePopup}>Close</Button>
+                            <Button variant="secondary"  style={{ margin: "10px" }} onClick={this.props.closeLoader}>Close</Button>
                         </div>
                     </Modal.Dialog>
                 </div>
