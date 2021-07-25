@@ -2,6 +2,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+/// @title Planet reactions
+/// @author Danny ba and Aymeric Noel
+/// @notice we going to use this contract handle "reaction" of the planet
+
 import "./NFTplanet.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
