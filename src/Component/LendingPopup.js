@@ -30,8 +30,11 @@ class LendingPopup extends Component {
                 <div className='popup_inner'>
                     <Modal.Dialog centered>
                         <Modal.Header>
-                            <Modal.Title>You are on the {this.props.planetID} planet</Modal.Title>
+                            <Modal.Title>You are on the planet {this.props.planetID}.</Modal.Title>
                         </Modal.Header>
+                        <Modal.Body>
+
+                        </Modal.Body>
                         <div>
                             <Button variant="secondary" style={{ margin: "10px" }} onClick={this.props.closePopup}>Close</Button>
                             

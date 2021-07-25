@@ -1,8 +1,8 @@
-import React, {Component, useLayoutEffect} from "react";
+import React, { Component, useLayoutEffect } from "react";
 import * as THREE from "three";
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 import OrbitControls from "three-orbitcontrols";
-import {Nav, Navbar} from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 import LendingPopup from "../Component/LendingPopup"
 import NFTLoader from "../Component/NFTLoader"
 import axios from 'axios';
@@ -35,7 +35,7 @@ class ThreeScene extends Component {
     };
 
     this.planetArray = [];
-
+    this.GraphURL = "https://gateway.thegraph.com/api/<API_KEY>/subgraphs/id/<SUBGRAPH_ID>\nx";
     this.mouse = new THREE.Vector2();
     this.intersected = null;
 
@@ -55,13 +55,13 @@ class ThreeScene extends Component {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   };
 
-  closePopup=()=> {
+  closePopup = () => {
     this.setState({
       showPopup: false
     });
   }
 
-  closeLoader=()=> {
+  closeLoader = () => {
     this.setState({
       showNFTLoader: false
     });
@@ -69,13 +69,19 @@ class ThreeScene extends Component {
 
   async componentDidMount() {
 
-    this.setState({contract: this.context.instance});
-    this.setState({accounts: await this.context.accountsPromise});
+    this.setState({ contract: this.context.instance });
+    this.setState({ accounts: await this.context.accountsPromise });
+
+    const planets = queryPlanetsFromGraph();
+    planets.map((planet)=>{
+      const radius = this.getRandomLogInt(2,5);
+      this.createSphere(radius, planet.id);
+    });
 
     const width = this.state.width;
     const height = this.state.height;
     this.scene = new THREE.Scene();
-    this.setState({mouse: new THREE.Vector2()});
+    this.setState({ mouse: new THREE.Vector2() });
     //Add Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setClearColor("#263238");
@@ -112,9 +118,9 @@ class ThreeScene extends Component {
 
 
     const loader = new THREE.FontLoader();
-    loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+    loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
 
-      const geometryText = new THREE.TextGeometry( 'Hello three.js!', {
+      const geometryText = new THREE.TextGeometry('Hello three.js!', {
         font: font,
         size: 8000,
         height: 5,
@@ -124,7 +130,7 @@ class ThreeScene extends Component {
         bevelSize: 8,
         bevelOffset: 0,
         bevelSegments: 5
-      } );
+      });
       const materialText = new THREE.MeshBasicMaterial({
         color: '#6ab056'
       });
@@ -134,22 +140,22 @@ class ThreeScene extends Component {
       textMesh.position.z = 10;
       this.scene.add(textMesh);
 
-    } );
+    });
 
-    for ( let i = 2; i < 6; i++) {
+    for (let i = 2; i < 6; i++) {
       const curve = new THREE.EllipseCurve(
-          0,  0,            // ax, aY
-          100*Math.log(i), 100*Math.log(i),           // xRadius, yRadius
-          0,  2 * Math.PI,  // aStartAngle, aEndAngle
-          false,            // aClockwise
-          0                 // aRotation
+        0, 0,            // ax, aY
+        100 * Math.log(i), 100 * Math.log(i),           // xRadius, yRadius
+        0, 2 * Math.PI,  // aStartAngle, aEndAngle
+        false,            // aClockwise
+        0                 // aRotation
       );
 
-      const points = curve.getPoints( 128 );
-      const geometry3 = new THREE.BufferGeometry().setFromPoints( points );
+      const points = curve.getPoints(128);
+      const geometry3 = new THREE.BufferGeometry().setFromPoints(points);
       geometry3.rotateX(-Math.PI / 2);
-      const material3 = new THREE.LineBasicMaterial( { color : 0xCC0000 } );
-      const ellipse = new THREE.Line( geometry3, material3 );
+      const material3 = new THREE.LineBasicMaterial({ color: 0xCC0000 });
+      const ellipse = new THREE.Line(geometry3, material3);
       this.scene.add(ellipse);
     }
     this.renderScene();
@@ -157,42 +163,42 @@ class ThreeScene extends Component {
     this.start();
 
     window.addEventListener('resize', this.updateDimensions);
-    window.addEventListener( 'mousemove', this.onMouseMove, false );
+    window.addEventListener('mousemove', this.onMouseMove, false);
 
-    window.addEventListener( 'click', this.onMouseClick, false );
-    this.setState({showPopup : true})
+    window.addEventListener('click', this.onMouseClick, false);
+    this.setState({ showPopup: true })
 
   }
 
   createSphere(radius, planetID) {
-      const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
-      const material = new THREE.MeshBasicMaterial({
-          color: '#6ab056',
-          wireframe: true
-      });
-      let cubeMesh = new THREE.Mesh(cubeGeometry, material);
+    const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
+    const material = new THREE.MeshBasicMaterial({
+      color: '#6ab056',
+      wireframe: true
+    });
+    let cubeMesh = new THREE.Mesh(cubeGeometry, material);
 
-      let planet = {
-        radius: radius,
-        angle:  Math.random() * 360,
-        id: planetID,
-      }
+    let planet = {
+      radius: radius,
+      angle: Math.random() * 360,
+      id: planetID,
+    }
 
-      const posXY = this.getXYPosition(planet);
-      cubeMesh.position.x = posXY.positionX;
-      cubeMesh.position.z = posXY.positionZ;
-      cubeMesh.position.y = 0;
-      planet.mesh = cubeMesh;
-      this.addPlanet(planet);
+    const posXY = this.getXYPosition(planet);
+    cubeMesh.position.x = posXY.positionX;
+    cubeMesh.position.z = posXY.positionZ;
+    cubeMesh.position.y = 0;
+    planet.mesh = cubeMesh;
+    this.addPlanet(planet);
 
-      cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
-      cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
-      cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
-      
-      const scale = Math.random() + 0.5;
-      cubeMesh.scale.x = scale;
-      cubeMesh.scale.y = scale;
-      cubeMesh.scale.z = scale;
+    cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
+    cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
+    cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
+
+    const scale = Math.random() + 0.5;
+    cubeMesh.scale.x = scale;
+    cubeMesh.scale.y = scale;
+    cubeMesh.scale.z = scale;
 
     cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
     cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
@@ -203,22 +209,22 @@ class ThreeScene extends Component {
 
   addPlanet = (planet) => {
     this.planetArray.push(planet);
-    this.setState({planets: planet}, () => {
+    this.setState({ planets: planet }, () => {
       console.log(this.state.planets);
     });
   }
 
   getXYPosition = (planet) => {
     return {
-      positionX: planet.radius*Math.cos(planet.angle),
-      positionZ: planet.radius*Math.sin(planet.angle)
+      positionX: planet.radius * Math.cos(planet.angle),
+      positionZ: planet.radius * Math.sin(planet.angle)
     }
   }
 
   getRandomLogInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return 100*Math.log(Math.floor(Math.random() * (max - min + 1)) + min);
+    return 100 * Math.log(Math.floor(Math.random() * (max - min + 1)) + min);
   }
 
   createNFTPlanet = async (NFTName, NFTDescription, NFTFile) => {
@@ -226,7 +232,7 @@ class ThreeScene extends Component {
     dotenv.config();
     //const apiKey = process.env.API_NFT_STORAGE_KEY;
     const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDIwODZiMDI0NjZEQTQwQjBFNDEyOGM0NTdCMDFDYzZDMzhhYUZhZEIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYyNzE1NzExMjE5MCwibmFtZSI6IlBsYW5ldE5GVCJ9.wVX9L6uGGTRxxGg7jneXUYgd0Q8lveKFXnWCUo0tvkc";
-    const client = new NFTStorage({token: apiKey})
+    const client = new NFTStorage({ token: apiKey })
 
     const metadata = await client.store({
       name: NFTName,
@@ -236,63 +242,63 @@ class ThreeScene extends Component {
     console.log(metadata.url);
 
     const mintedPlanet = await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
-        .send({from: this.state.accounts[0], value: 0.01*10**18})
-        .then(res => {
-          const IDPlanet = res.events.NewPlanet.returnValues.id;
-          console.log('Success', res);
-          alert('You have successfully created a new NFT! ID : ' + IDPlanet)
+      .send({ from: this.state.accounts[0], value: 0.01 * 10 ** 18 })
+      .then(res => {
+        const IDPlanet = res.events.NewPlanet.returnValues.id;
+        console.log('Success', res);
+        alert('You have successfully created a new NFT! ID : ' + IDPlanet)
 
-          let radius = this.getRandomLogInt(2, 5);
-          this.createSphere(radius, IDPlanet);
+        let radius = this.getRandomLogInt(2, 5);
+        this.createSphere(radius, IDPlanet);
 
-          return IDPlanet;
-        })
-        .catch(err => console.log(err));
+        return IDPlanet;
+      })
+      .catch(err => console.log(err));
 
     console.log(mintedPlanet)
   }
 
-  async fetchNFT (contractAddress, tokenID) {
+  async fetchNFT(contractAddress, tokenID) {
     const req = await axios.get(`https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenID}`)
-        .then(function(response) {
-            return response
-        })
-    return {contract: req.data.asset_contract.address, image: req.data.asset_contract.image_url, name: req.data.name, owner: req.data.owner.address, tokenID: req.data.token_id};
+      .then(function (response) {
+        return response
+      })
+    return { contract: req.data.asset_contract.address, image: req.data.asset_contract.image_url, name: req.data.name, owner: req.data.owner.address, tokenID: req.data.token_id };
   }
 
-  onMouseMove( event ) {
+  onMouseMove(event) {
 
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
     let mouse = this.mouse;
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     if (this.state.intersected !== null)
       this.state.intersected.material.color.set(0x6ab056);
-    this.setState({mouse: mouse, intersected: null});
+    this.setState({ mouse: mouse, intersected: null });
 
   }
 
-  onMouseClick( event ) {
+  onMouseClick(event) {
 
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
 
     let mouse = this.mouse;
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    this.setState({mouse: mouse})
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    this.setState({ mouse: mouse })
     // console.log(this.state.intersected.type)
-    if (this.state.intersected !== null ) {
-      if(this.state.intersected.type.toString() == 'Mesh') {
-        this.setState({isSelected: true}, () => {
+    if (this.state.intersected !== null) {
+      if (this.state.intersected.type.toString() == 'Mesh') {
+        this.setState({ isSelected: true }, () => {
           console.log(this.state.isSelected);
-          this.setState({showPopup : true})
+          this.setState({ showPopup: true })
           console.log(`is showpopup : ${this.state.showPopup}`);
         });
       }
     } else {
-      this.setState({isSelected: false}, () => {
+      this.setState({ isSelected: false }, () => {
         console.log(this.state.isSelected);
       });
     }
@@ -310,7 +316,7 @@ class ThreeScene extends Component {
   animate = () => {
     for (let i = 0; i < this.planetArray.length; i++) {
 
-      this.planetArray[i].angle = (this.planetArray[i].angle > 360) ? 0 : this.planetArray[i].angle + this.planetArray[i].radius/100000;
+      this.planetArray[i].angle = (this.planetArray[i].angle > 360) ? 0 : this.planetArray[i].angle + this.planetArray[i].radius / 100000;
       this.planetArray[i].mesh.position.x = this.getXYPosition(this.planetArray[i]).positionX;
       this.planetArray[i].mesh.position.z = this.getXYPosition(this.planetArray[i]).positionZ;
     }
@@ -320,98 +326,109 @@ class ThreeScene extends Component {
 
   };
 
-
-  queryGraph = () => {
-    const APIURL = "https://gateway.thegraph.com/api/<API_KEY>/subgraphs/id/<SUBGRAPH_ID>\nx";
-
-    const planetNFT = `
-  query {
-    newplanets {
-      id
-      nbSlots
-    }
-  }
-` 
-const NFTinPlanet =`
-query {
-  nftaddeds {
-    planetid
-    owner
-    nftaddress
-    nftid
-  }
-}
-`
-
+  queryPlanetsFromGraph = () => {
+    const planetRequest = `
+            query {
+              newplanets {
+                id
+                nbSlots
+              }
+            }
+          `
     const client = new ApolloClient({
-      uri: APIURL,
+      uri: this.GraphURL,
       cache: new InMemoryCache()
     });
 
+    let receivedData;
     client.query({
-      query: gql(planetNFT)
+      query: gql(planetRequest)
     })
-        .then(data => console.log("Subgraph data: ", data))
-        .catch(err => { console.log("Error fetching data: ", err) });
-    
+      .then(data => {
+        console.log("Subgraph data: ", data)
+        receivedData = data;
+      })
+      .catch(err => { console.log("Error fetching data: ", err) });
+    return receivedData;
+  }
+  queryNftsFromGraph = () => {
+    const nftRequest = `
+          query {
+            nftaddeds {
+              planetid
+              owner
+              nftaddress
+              nftid
+            }
+          }
+          `
+    const client = new ApolloClient({
+      uri: this.GraphURL,
+      cache: new InMemoryCache()
+    });
+
+    let receivedData;
     client.query({
-      query: gql(NFTinPlanet)
+      query: gql(nftRequest)
     })
-        .then(data => console.log("Subgraph data: ", data))
-        .catch(err => { console.log("Error fetching data: ", err) });
-    
+      .then(data => {
+        console.log("Subgraph data: ", data)
+        receivedData = data;
+      })
+      .catch(err => { console.log("Error fetching data: ", err) });
+    return receivedData;
   }
 
   renderScene = () => {
-      // update the picking ray with the camera and mouse position
-    this.state.raycaster.setFromCamera( this.mouse, this.camera );
+    // update the picking ray with the camera and mouse position
+    this.state.raycaster.setFromCamera(this.mouse, this.camera);
 
     // calculate objects intersecting the picking ray
-    const intersects = this.state.raycaster.intersectObjects( this.scene.children );
+    const intersects = this.state.raycaster.intersectObjects(this.scene.children);
 
-    if ( intersects.length > 0) {
+    if (intersects.length > 0) {
 
       intersects[0].object.material.color.set(0xff0000);
-      this.setState({intersected: intersects[0].object});
+      this.setState({ intersected: intersects[0].object });
     }
-   /* if ( intersects.length > 0) {
-
-      intersects[0].object.material.color.set(0xff0000);
-      this.intersected = intersects[0].object;
-    } else {
-      if (this.intersected !== null) {
-        this.intersected.material.color.set(0x6ab056);
-      }
-      this.intersected = null;
-    }*/
+    /* if ( intersects.length > 0) {
+ 
+       intersects[0].object.material.color.set(0xff0000);
+       this.intersected = intersects[0].object;
+     } else {
+       if (this.intersected !== null) {
+         this.intersected.material.color.set(0x6ab056);
+       }
+       this.intersected = null;
+     }*/
 
     if (this.renderer) this.renderer.render(this.scene, this.camera);
 
   };
   render() {
-      return (
-          <div className="App">
-            <div ref={mount => {
-              this.mount = mount
-            }}
-            />
-            {this.state.showPopup ?
-                <LendingPopup
-                    handleLend={this.handleLend}
-                    closePopup={this.closePopup}
-                    planetID={this.intersected}
-                />
-                : null
-            }
-            {this.state.showNFTLoader ?
-                <NFTLoader
-                    createNFTPlanet={this.createNFTPlanet}
-                    closeLoader={this.closeLoader}
-                />
-                : null
-            }
-          </div>
-      )
+    return (
+      <div className="App">
+        <div ref={mount => {
+          this.mount = mount
+        }}
+        />
+        {this.state.showPopup ?
+          <LendingPopup
+            handleLend={this.handleLend}
+            closePopup={this.closePopup}
+            planetID={this.intersected}
+          />
+          : null
+        }
+        {this.state.showNFTLoader ?
+          <NFTLoader
+            createNFTPlanet={this.createNFTPlanet}
+            closeLoader={this.closeLoader}
+          />
+          : null
+        }
+      </div>
+    )
   }
 }
 ThreeScene.contextType = BlockchainContext;

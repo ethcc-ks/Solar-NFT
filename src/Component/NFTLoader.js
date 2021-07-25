@@ -33,7 +33,7 @@ class Popup extends Component {
                 <div className='popup_inner'>
                     <Modal.Dialog centered>
                         <Modal.Header>
-                            <Modal.Title>Upload your incredible NFT</Modal.Title>
+                            <Modal.Title>Create your wonderful planETH !</Modal.Title>
                         </Modal.Header>
                         <div className="mb-3">
                             <input className="form-control" type="file" id="formFile" onChange={this.changeHandler}/>
