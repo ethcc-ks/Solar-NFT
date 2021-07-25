@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/subgraph-ks" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/subgraph-ks/subgraph-studio" vcs="Git" />
   </component>
 </project>
