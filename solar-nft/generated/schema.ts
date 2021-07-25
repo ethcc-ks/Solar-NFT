@@ -180,13 +180,13 @@ export class NewPlanet extends Entity {
     return store.get("NewPlanet", id) as NewPlanet | null;
   }
 
-  get id(): BigInt {
+  get id(): string {
     let value = this.get("id");
-    return value.toBigInt();
+    return value.toString();
   }
 
-  set id(value: BigInt) {
-    this.set("id", Value.fromBigInt(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 }
 
