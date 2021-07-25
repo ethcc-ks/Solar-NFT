@@ -35,7 +35,7 @@ class ThreeScene extends Component {
     };
 
     this.planetArray = [];
-    this.GraphURL = "https://api.studio.thegraph.com/query/3145/ks/v0.0.9";
+    this.GraphURL = "https://api.studio.thegraph.com/query/3145/ks/v0.0.15";
     this.mouse = new THREE.Vector2();
     this.intersected = null;
 
@@ -69,13 +69,7 @@ class ThreeScene extends Component {
   async componentDidMount() {
 
     this.setState({ contract: this.context.instance });
-    this.setState({ accounts: await this.context.accountsPromise });
-
-    const graphResult = await this.queryPlanetsFromGraph();
-    graphResult.data.planets.map((planet)=>{
-      const radius = this.getRandomLogInt(2,5);
-      this.createSphere(radius, planet.id);
-    });
+    this.setState({ accounts: await this.context.accountsPromise }); 
 
     const width = this.state.width;
     const height = this.state.height;
@@ -157,6 +151,12 @@ class ThreeScene extends Component {
       const ellipse = new THREE.Line(geometry3, material3);
       this.scene.add(ellipse);
     }
+    
+    const graphResult = await this.queryPlanetsFromGraph();
+    graphResult.data.transfers.map((transfer)=>{
+      const radius = this.getRandomLogInt(2,5);
+      this.createSphere(radius, transfer.id);
+    });
     this.renderScene();
     //start animation
     this.start();
@@ -170,6 +170,8 @@ class ThreeScene extends Component {
   }
 
   createSphere(radius, planetID) {
+    console.log(radius)
+    console.log(planetID)
     const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
     const material = new THREE.MeshBasicMaterial({
       color: '#6ab056',
@@ -329,7 +331,7 @@ class ThreeScene extends Component {
   queryPlanetsFromGraph = () => {
     const planetRequest = `
             query {
-              planets {
+              transfers {
                 id
               }
             }
