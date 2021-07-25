@@ -12,6 +12,7 @@ import { NFTStorage, File } from 'nft.storage'
 import NFTPlanet from '../contracts/NFTplanet.json'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import BlockchainContext from "../context/BlockchainContext";
+import { Mesh } from "three";
 
 
 class ThreeScene extends Component {
@@ -174,7 +175,7 @@ class ThreeScene extends Component {
       let planet = {
         radius: radius,
         angle:  Math.random() * 360,
-        id: planetID
+        id: planetID,
       }
 
       const posXY = this.getXYPosition(planet);
@@ -281,13 +282,15 @@ class ThreeScene extends Component {
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     this.setState({mouse: mouse})
-
-    if (this.state.intersected !== null) {
-      this.setState({isSelected: true}, () => {
-        console.log(this.state.isSelected);
-        this.setState({showPopup : true})
-        console.log(`is showpopup : ${this.state.showPopup}`);
-      });
+    // console.log(this.state.intersected.type)
+    if (this.state.intersected !== null ) {
+      if(this.state.intersected.type.toString() == 'Mesh') {
+        this.setState({isSelected: true}, () => {
+          console.log(this.state.isSelected);
+          this.setState({showPopup : true})
+          console.log(`is showpopup : ${this.state.showPopup}`);
+        });
+      }
     } else {
       this.setState({isSelected: false}, () => {
         console.log(this.state.isSelected);
