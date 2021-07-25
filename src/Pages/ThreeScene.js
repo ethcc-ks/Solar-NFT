@@ -12,7 +12,7 @@ import { NFTStorage, File } from 'nft.storage'
 import NFTPlanet from '../contracts/NFTplanet.json'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import BlockchainContext from "../context/BlockchainContext";
-import { Mesh } from "three";
+import { Mesh, ObjectSpaceNormalMap } from "three";
 
 
 class ThreeScene extends Component {
@@ -31,10 +31,12 @@ class ThreeScene extends Component {
       accounts: null,
       showPopup: false,
       showNFTLoader: true,
-      contract: null
+      contract: null,
+      clickPlanetID: 0,
     };
 
     this.planetArray = [];
+    this.planetDictionary = {};
     this.GraphURL = "https://api.studio.thegraph.com/query/3145/ks/v0.0.15";
     this.mouse = new THREE.Vector2();
     this.intersected = null;
@@ -190,6 +192,7 @@ class ThreeScene extends Component {
     cubeMesh.position.z = posXY.positionZ;
     cubeMesh.position.y = 0;
     planet.mesh = cubeMesh;
+    this.planetDictionary[planet.mesh.uuid] = planetID
     this.addPlanet(planet);
 
     cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
@@ -250,7 +253,7 @@ class ThreeScene extends Component {
         console.log('Success', res);
         alert('You have successfully created a new NFT! ID : ' + IDPlanet)
 
-        let radius = this.getRandomLogInt(2, 5);
+        let radius = this.getRandomLogInt(5, 5);
         this.createSphere(radius, IDPlanet);
 
         return IDPlanet;
@@ -293,6 +296,11 @@ class ThreeScene extends Component {
     // console.log(this.state.intersected.type)
     if (this.state.intersected !== null) {
       if (this.state.intersected.type.toString() === 'Mesh') {
+        console.log(this.state.intersected.uuid)
+        console.log(this.planetDictionary[this.state.intersected.uuid])
+        this.setState({clickPlanetID: this.planetDictionary[this.state.intersected.uuid]}, () =>  {
+          console.log(this.state.clickPlanetID)
+        })
         this.setState({ isSelected: true }, () => {
           console.log(this.state.isSelected);
           this.setState({ showPopup: true })
@@ -416,7 +424,7 @@ class ThreeScene extends Component {
           <LendingPopup
             handleLend={this.handleLend}
             closePopup={this.closePopup}
-            planetID={this.intersected}
+            planetID={this.state.clickPlanetID}
           />
           : null
         }
