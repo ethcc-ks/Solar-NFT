@@ -42,7 +42,7 @@ class App extends Component {
 
       instance = new web3.eth.Contract(
         NFTPlanet.abi,
-        "0xe27Ca6a5B8BF1350cE50D103853836a8d24a9f7E"
+        "0xB89AEc1455E07393B5b4B49Ad33B408d8F912B55"
       );
       if (this.state.accounts !== null) {
         return (
