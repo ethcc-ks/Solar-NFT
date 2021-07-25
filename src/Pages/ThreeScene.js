@@ -241,7 +241,7 @@ class ThreeScene extends Component {
     console.log(metadata.url);
 
     const mintedPlanet = await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
-      .send({ from: this.state.accounts[0], value: 0.01 * 10 ** 18 })
+      .send({ from: this.state.accounts[0], value: 0.002 * 10 ** 18 })
       .then(res => {
         const IDPlanet = res.events.NewPlanet.returnValues.id;
         console.log('Success', res);
