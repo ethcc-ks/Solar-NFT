@@ -1,0 +1,26 @@
+type NFTInPlanet @entity {
+  id: ID! # id of each NFT in the planet
+  owner: String! # address
+  nftAddress: String! #address of an NFT added in the planet
+  planet: Planet! #
+}
+
+type Planet @entity {
+  id: ID!
+  planetId: ID!
+  nbSlots: String! # uint256
+}
+
+type Transfer @entity {
+  id: ID!
+  from: String! # address
+  to: String! # address
+  tokenId: String! # uint256
+}
+
+type Slot @entity {
+  id: ID!
+  owner: String! # address
+  planet: Planet!
+  nftInPlanet: NFTInPlanet! # Each NFT in the planet have its a slot, or empty (0)
+}
