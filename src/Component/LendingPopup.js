@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Button, Form, Modal } from "react-bootstrap";
 
@@ -23,6 +24,14 @@ class LendingPopup extends Component {
         this.setState({amountToLend: e.target.value})
     }
 
+    async fetchNFT (contractAddress, tokenID) {
+        const req = await axios.get(`https://rinkeby-api.opensea.io/api/v1/asset/${contractAddress}/${tokenID}`)
+            .then(function(response) {
+                return response
+            })
+        return {contract: req.data.asset_contract.address, image: req.data.asset_contract.image_url, name: req.data.name, owner: req.data.owner.address, tokenID: req.data.token_id};
+    }
+
     render() {
         return (
             <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto'}}>
@@ -41,6 +50,7 @@ class LendingPopup extends Component {
                         <div>
                             <Button variant="primary" style={{ margin: "10px" }} onClick={this.handleSubmission}>Lend</Button>
                             <Button variant="secondary" style={{ margin: "10px" }} onClick={this.props.closePopup}>Close</Button>
+                            
                         </div>
                     </Modal.Dialog>
                 </div>
