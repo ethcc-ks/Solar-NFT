@@ -13,22 +13,21 @@ export function handleTransfer(event: TransferEvent): void {
     token = new Transfer(event.params.tokenId.toString());
     token.from = event.params.from.toHexString();
     token.to = event.params.to.toHexString();
-    token.to = event.params.to.toHexString();
     token.tokenId = event.params.tokenId.toString();
   }
   token.save();
 }
 
-/*export function handleNFTadded(event: NFTaddedEvent): void {
-  let token = NFTInPlanet.load(event.params.tokenId.toString());
+export function handleNFTadded(event: NFTaddedEvent): void {
+  let token = NFTInPlanet.load(event.params.planetId.toString());
   if (!token) {
-    token = new NFTInPlanet(event.params.tokenId.toString());
+    token = new NFTInPlanet(event.params.planetId.toString());
     token.from = event.transaction.from.toHexString();
     token.to = event.transaction.to.toHexString();
-    token.tokenId = event.params.tokenId;
+    token.tokenId = event.params.planetId;
   }
   token.save();
-}*/
+}
 
 
 export function handleNewPlanet(event: NewPlanetEvent): void {
@@ -41,16 +40,6 @@ export function handleNewPlanet(event: NewPlanetEvent): void {
   }
   planet.save();
 }
-
-
-  /*  let token = NewPlanet.load(event.transaction.tokenId.toString());
-    if (!token) {
-      token = new NewPlanet(event.params.tokenId.toString());
-
-      token.id = event.transaction.tokens.toHexString();
-
-    }
-    token.save();*/
 
 
 

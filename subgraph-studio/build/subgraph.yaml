@@ -14,10 +14,8 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - NFTInPlanet
         - Planet
         - Transfer
-        - Slot
       abis:
         - name: PlanetReact
           file: PlanetReact/abis/PlanetReact.json

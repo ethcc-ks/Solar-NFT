@@ -7,7 +7,7 @@ type NFTInPlanet @entity {
 
 type Planet @entity {
   id: ID!
-  planetId: String!
+  planetId: ID!
   nbSlots: String! # uint256
 }
 
