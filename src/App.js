@@ -71,22 +71,6 @@ class App extends Component {
                     <Nav.Link href="/users">Users</Nav.Link>
                   </Nav>
 
-                  {/* <div>
-                    <nav>
-                      <ul>
-                        <li>
-                          <Link to='/'>Home</Link>
-                        </li>
-                        <li>
-                          <Link to='/play'>Play</Link>
-                        </li>
-                        <li>
-                          <Link to='/users'>Users</Link>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div> */}
-
                   <Navbar.Collapse className='justify-content-end'>
                     <Navbar.Text>Balance: {this.state.balance} ETH</Navbar.Text>
                   </Navbar.Collapse>
