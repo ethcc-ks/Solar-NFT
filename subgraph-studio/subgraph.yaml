@@ -23,7 +23,14 @@ dataSources:
 
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+
         - event: NewPlanet(uint256,uint256)
           handler: handleNewPlanet
+
+        - event: NFTadded(uint256, address, address,uint256)
+          handler: handleNFTadded
+
+        - event: slotAdded(uint256, address)
+          handler: handleslotAdded
 
       file: ./src/mapping.ts

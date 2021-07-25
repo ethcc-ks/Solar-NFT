@@ -19,12 +19,11 @@ export function handleTransfer(event: TransferEvent): void {
 }
 
 export function handleNFTadded(event: NFTaddedEvent): void {
-  let token = NFTInPlanet.load(event.params.planetId.toString());
-  if (!token) {
-    token = new NFTInPlanet(event.params.planetId.toString());
-
+  let nft = NFTInPlanet.load(event.params.planetId.toString());
+  if (!nft) {
+    nft = new NFTInPlanet(event.params.planetId.toString());
   }
-  token.save();
+  nft.save();
 }
 
 
@@ -39,6 +38,14 @@ export function handleNewPlanet(event: NewPlanetEvent): void {
   planet.save();
 }
 
+
+export function handleslotAdded(event: slotAddedEvent): void {
+  let slot = Slot.load(event.params.planetId.toString());
+  if (!slot) {
+    slot = new Slot(event.params.planetId.toString());
+  }
+  slot.save();
+}
 
 
 /*
