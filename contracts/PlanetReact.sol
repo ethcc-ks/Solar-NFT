@@ -6,8 +6,8 @@ import "./NFTplanet.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract PlanetReact is NFTplanet{
-    event NFTadded();
-    event slotAdded();
+    event NFTadded(uint256 planetId, address owner, address nftAddress, uint256 nftId);
+    event slotAdded(uint256 planetId, address owner);
 
     modifier onlyPlanetOwner(uint256 planetId){
         require(msg.sender==allPlanets[planetId].owner);
@@ -34,7 +34,7 @@ contract PlanetReact is NFTplanet{
             }
                
                 currentPlanet.nftCounter++;               
-                emit NFTadded();
+                emit NFTadded(planetId, msg.sender,address(nftContract), tokenId);
     }
 
 
@@ -42,7 +42,7 @@ contract PlanetReact is NFTplanet{
     function addSlot(uint256 planetId) private{
         Planet storage currentPlanet = allPlanets[planetId];
         currentPlanet.allNfts.push();
-        emit slotAdded();
+        emit slotAdded(planetId, msg.sender);
 
     }
 
