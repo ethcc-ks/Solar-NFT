@@ -35,7 +35,7 @@ class ThreeScene extends Component {
     };
 
     this.planetArray = [];
-    this.GraphURL = "https://gateway.thegraph.com/api/<API_KEY>/subgraphs/id/<SUBGRAPH_ID>\nx";
+    this.GraphURL = "https://api.studio.thegraph.com/query/3145/ks/v0.0.9";
     this.mouse = new THREE.Vector2();
     this.intersected = null;
 
@@ -48,7 +48,6 @@ class ThreeScene extends Component {
     this.closePopup = this.closePopup.bind(this);
     this.closeLoader = this.closeLoader.bind(this);
     this.createNFTPlanet = this.createNFTPlanet.bind(this);
-    this.queryGraph = this.queryGraph.bind(this);
   }
 
   updateDimensions = () => {
@@ -72,8 +71,8 @@ class ThreeScene extends Component {
     this.setState({ contract: this.context.instance });
     this.setState({ accounts: await this.context.accountsPromise });
 
-    const planets = queryPlanetsFromGraph();
-    planets.map((planet)=>{
+    const graphResult = await this.queryPlanetsFromGraph();
+    graphResult.data.planets.map((planet)=>{
       const radius = this.getRandomLogInt(2,5);
       this.createSphere(radius, planet.id);
     });
@@ -329,9 +328,8 @@ class ThreeScene extends Component {
   queryPlanetsFromGraph = () => {
     const planetRequest = `
             query {
-              newplanets {
+              planets {
                 id
-                nbSlots
               }
             }
           `
@@ -340,21 +338,20 @@ class ThreeScene extends Component {
       cache: new InMemoryCache()
     });
 
-    let receivedData;
-    client.query({
+    const result = client.query({
       query: gql(planetRequest)
     })
       .then(data => {
         console.log("Subgraph data: ", data)
-        receivedData = data;
+        return data;
       })
       .catch(err => { console.log("Error fetching data: ", err) });
-    return receivedData;
+    return result;
   }
   queryNftsFromGraph = () => {
     const nftRequest = `
           query {
-            nftaddeds {
+            nftinplanets {
               planetid
               owner
               nftaddress
