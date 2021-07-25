@@ -243,7 +243,8 @@ class ThreeScene extends Component {
     const mintedPlanet = await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
       .send({ from: this.state.accounts[0], value: 0.002 * 10 ** 18 })
       .then(res => {
-        const IDPlanet = res.events.NewPlanet.returnValues.id;
+        console.log(res.events.Transfer.returnValues.tokenId)
+        const IDPlanet = res.events.Transfer.returnValues.tokenId;
         console.log('Success', res);
         alert('You have successfully created a new NFT! ID : ' + IDPlanet)
 
@@ -289,7 +290,7 @@ class ThreeScene extends Component {
     this.setState({ mouse: mouse })
     // console.log(this.state.intersected.type)
     if (this.state.intersected !== null) {
-      if (this.state.intersected.type.toString() == 'Mesh') {
+      if (this.state.intersected.type.toString() === 'Mesh') {
         this.setState({ isSelected: true }, () => {
           console.log(this.state.isSelected);
           this.setState({ showPopup: true })

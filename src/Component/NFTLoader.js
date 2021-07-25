@@ -24,7 +24,12 @@ class Popup extends Component {
     handleSubmission = async () => {
         let data = this;
         console.log(this.state.selectedFile);
+        console.log(this.state.NFTName)
         await this.props.createNFTPlanet(this.state.NFTName, this.state.NFTDescription, this.state.selectedFile);
+    };
+
+    changeName = (event) => {
+        this.setState({NFTName: event.target.value})
     };
 
     render() {
@@ -35,6 +40,9 @@ class Popup extends Component {
                         <Modal.Header>
                             <Modal.Title>Create your wonderful planETH !</Modal.Title>
                         </Modal.Header>
+                        <div className="mb-3">
+                            <input className="form-control" type="text" id="formName" onChange={this.changeName} placeholder='Planet Name'/>
+                        </div>
                         <div className="mb-3">
                             <input className="form-control" type="file" id="formFile" onChange={this.changeHandler}/>
                         </div>
