@@ -130,20 +130,19 @@ class ThreeScene extends Component {
   }
 
   createSphere(radius, planetID) {
-    console.log(radius)
-    console.log(planetID)
-    const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
-    const material = new THREE.MeshBasicMaterial({
-      color: "#"+ Math.floor(Math.random()*16777215).toString(16),
-      wireframe: true
-    });
-    let cubeMesh = new THREE.Mesh(cubeGeometry, material);
 
     let planet = {
       radius: radius,
       angle: Math.random() * 360,
       id: planetID,
+      color: "#"+ Math.floor(Math.random()*16777215).toString(16),
     }
+
+    const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
+    const material = new THREE.MeshPhongMaterial({
+      color: planet.color
+    });
+    let cubeMesh = new THREE.Mesh(cubeGeometry, material);
 
     const posXY = this.getXYPosition(planet);
     cubeMesh.position.x = posXY.positionX;
@@ -237,7 +236,14 @@ class ThreeScene extends Component {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     if (this.state.intersected !== null)
-      this.state.intersected.material.color.set(0x6ab056);
+      if (this.state.intersected.type.toString() === 'Mesh') {
+        for (let i = 0; i < this.planetArray.length; i++) {
+          const element = this.planetArray[i];
+          if(element.mesh.uuid == this.state.intersected.uuid) {
+            this.state.intersected.material.color.set(element.color);
+          }
+        }
+      }
     this.setState({ mouse: mouse, intersected: null });
 
   }

@@ -64,6 +64,10 @@ class ThreeScene extends Component {
       this.camera.rotation.x = -0.2;
       this.camera.lookAt(this.scene.position);
 
+      var loader  = new THREE.TextureLoader();
+      const texture = loader.load( "url(http://localhost:3000/skydome.png)" );
+      this.scene.background = texture;
+
       //LIGHTS
       var lights = [];
       lights[0] = new THREE.PointLight(0x304ffe, 1, 0);
@@ -111,20 +115,19 @@ class ThreeScene extends Component {
     }
   
     createSphere(radius, planetID) {
-      console.log(radius)
-      console.log(planetID)
-      const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
-      const material = new THREE.MeshBasicMaterial({
-        color: "#"+ Math.floor(Math.random()*16777215).toString(16),
-        wireframe: true
-      });
-      let cubeMesh = new THREE.Mesh(cubeGeometry, material);
-  
+
       let planet = {
         radius: radius,
         angle: Math.random() * 360,
         id: planetID,
+        color: "#"+ Math.floor(Math.random()*16777215).toString(16),
       }
+
+      const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
+      const material = new THREE.MeshPhongMaterial({
+        color: planet.color
+      });
+      let cubeMesh = new THREE.Mesh(cubeGeometry, material);
   
       const posXY = this.getXYPosition(planet);
       cubeMesh.position.x = posXY.positionX;

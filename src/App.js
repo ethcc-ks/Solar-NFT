@@ -86,7 +86,7 @@ class App extends Component {
         throw new Error();
       }
     } catch (error) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div style={{position: 'absolute', top: '25%', margin: 'auto', left: '20%', right: '20%', textAlign: "center", fontSize: 50}}>Loading Web3, accounts, and contract...</div>;
     }
   }
 }
