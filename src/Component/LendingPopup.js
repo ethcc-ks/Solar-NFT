@@ -1,6 +1,5 @@
-import axios from 'axios';
 import React, { Component } from 'react';
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import BlockchainContext from "../context/BlockchainContext";
 
 class LendingPopup extends Component {
@@ -52,14 +51,15 @@ class LendingPopup extends Component {
 
     render() {
         return (
-            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto', right: 0}}>
+            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto', right: 10}}>
                 <div className='popup_inner'>
                     <Modal.Dialog centered>
                         <Modal.Header>
-                            <Modal.Title>You are on the planet {this.props.planetID}.</Modal.Title>
+                            <Modal.Title>You are on planet {this.props.planetID}.</Modal.Title>
                         </Modal.Header>
-                        <div className="mb-3">
-                        <Modal.Title>Add NFT to your planet</Modal.Title>
+                        <div className="mb-3" style={{paddingLeft: 15, paddingRight: 15}}>
+                        <h5>There are no NFTs on your planet</h5>
+                        <h6>Add NFT to your planet</h6>
                             <input className="form-control" type="text" id="formName" onChange={this.changeName} placeholder='NFT Contract'/>
                             <input className="form-control" type="text" id="formName" onChange={this.changeName} placeholder='Token ID'/>
                         </div>

@@ -34,8 +34,8 @@ class Popup extends Component {
 
     render() {
         return (
-            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto'}}>
-                <div className='popup_inner'>
+            <div className='popup' style={{position: 'absolute', top: 0, margin: 'auto', left: 10}}>
+                <div className='popup_inner' >
                     <Modal.Dialog centered>
                         <Modal.Header>
                             <Modal.Title>Create your wonderful planETH !</Modal.Title>
@@ -47,9 +47,9 @@ class Popup extends Component {
                             <input className="form-control" type="file" id="formFile" onChange={this.changeHandler}/>
                         </div>
                         {this.state.isFilePicked ? (
-                            <p>You can upload your file now</p>
+                            <p style={{paddingLeft: 10}}>You can upload your file now</p>
                         ) : (
-                            <p>Select a file to show details</p>
+                            <p style={{paddingLeft: 10}}>Select a file to show details</p>
                         )}
                         <div>
                             <Button variant="primary" style={{ margin: "10px" }} onClick={this.handleSubmission}>Submit</Button>

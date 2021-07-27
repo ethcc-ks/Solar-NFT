@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, } from "react-router-dom";
 
 import getWeb3 from "./getWeb3";
 import NFTPlanet from "./contracts/NFTplanet.json";

@@ -1,18 +1,13 @@
 import React, { Component, useLayoutEffect } from "react";
 import * as THREE from "three";
-import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 import OrbitControls from "three-orbitcontrols";
-import { Nav, Navbar } from "react-bootstrap";
 import LendingPopup from "../Component/LendingPopup"
 import NFTLoader from "../Component/NFTLoader"
 import axios from 'axios';
-import querystring from 'querystring';
 import dotenv from 'dotenv';
-import { NFTStorage, File } from 'nft.storage'
-import NFTPlanet from '../contracts/NFTplanet.json'
+import { NFTStorage } from 'nft.storage'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import BlockchainContext from "../context/BlockchainContext";
-import { Mesh, ObjectSpaceNormalMap } from "three";
 
 
 class ThreeScene extends Component {
@@ -79,7 +74,7 @@ class ThreeScene extends Component {
     this.setState({ mouse: new THREE.Vector2() });
     //Add Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setClearColor("#263238");
+    this.renderer.setClearColor("#000000");
     this.renderer.setSize(width, height);
     this.mount.appendChild(this.renderer.domElement);
     //add Camera
@@ -99,43 +94,6 @@ class ThreeScene extends Component {
     this.scene.add(lights[0]);
     this.scene.add(lights[1]);
     this.scene.add(lights[2]);
-
-    //ADD Your 3D Models here
-    const cubeGeometry = new THREE.SphereGeometry(3);
-    const material = new THREE.MeshBasicMaterial({
-      color: '#6ab056',
-      wireframe: true
-    });
-    this.cubeMesh = new THREE.Mesh(cubeGeometry, material);
-    this.cubeMesh.position.x = 36;
-    this.cubeMesh.position.y = 0;
-    this.scene.add(this.cubeMesh);
-
-
-    const loader = new THREE.FontLoader();
-    loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
-
-      const geometryText = new THREE.TextGeometry('Hello three.js!', {
-        font: font,
-        size: 8000,
-        height: 5,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 10,
-        bevelSize: 8,
-        bevelOffset: 0,
-        bevelSegments: 5
-      });
-      const materialText = new THREE.MeshBasicMaterial({
-        color: '#6ab056'
-      });
-      let textMesh = new THREE.Mesh(geometryText, materialText);
-      textMesh.position.y = 0;
-      textMesh.position.x = 0;
-      textMesh.position.z = 10;
-      this.scene.add(textMesh);
-
-    });
 
     for (let i = 2; i < 6; i++) {
       const curve = new THREE.EllipseCurve(
