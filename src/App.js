@@ -36,6 +36,7 @@ class App extends Component {
       // web3 instance.
       console.log("RENDING");
       web3 = getWeb3();
+      console.log(this.state.accounts);
 
       // Use web3 to get the user's accounts.
       accountsPromise = web3.eth.getAccounts();
