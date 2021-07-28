@@ -113,6 +113,7 @@ class ThreeScene extends Component {
     }
     
     const graphResult = await this.queryPlanetsFromGraph();
+    console.log(graphResult)
     graphResult.data.transfers.map((transfer)=>{
       const radius = this.getRandomLogInt(2,5);
       this.createSphere(radius, transfer.id);
@@ -131,11 +132,21 @@ class ThreeScene extends Component {
 
   createSphere(radius, planetID) {
 
+    var color = new THREE.Color( 0xffffff );
+    color.setHex( Math.random() * 0xffffff );
     let planet = {
       radius: radius,
       angle: Math.random() * 360,
       id: planetID,
-      color: "#"+ Math.floor(Math.random()*16777215).toString(16),
+      color: color  
+    }
+    for (let i = 0; i < this.planetArray.length; i++) {
+      const element = this.planetArray[i];
+      if(element.radius == planet.radius) {
+        if(planet.angle <= (element.angle + 5) && planet.angle >= (element.angle - 5)) {
+          planet.angle += 10
+        }
+      } 
     }
 
     const cubeGeometry = new THREE.SphereBufferGeometry(3, 16, 16);
@@ -216,8 +227,6 @@ class ThreeScene extends Component {
         return IDPlanet;
       })
       .catch(err => console.log(err));
-
-    console.log(mintedPlanet)
   }
 
   async fetchNFT(contractAddress, tokenID) {
@@ -257,24 +266,15 @@ class ThreeScene extends Component {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     this.setState({ mouse: mouse })
-    // console.log(this.state.intersected.type)
     if (this.state.intersected !== null) {
       if (this.state.intersected.type.toString() === 'Mesh') {
-        console.log(this.state.intersected.uuid)
-        console.log(this.planetDictionary[this.state.intersected.uuid])
-        this.setState({clickPlanetID: this.planetDictionary[this.state.intersected.uuid]}, () =>  {
-          console.log(this.state.clickPlanetID)
-        })
+        this.setState({clickPlanetID: this.planetDictionary[this.state.intersected.uuid]})
         this.setState({ isSelected: true }, () => {
-          console.log(this.state.isSelected);
           this.setState({ showPopup: true })
-          console.log(`is showpopup : ${this.state.showPopup}`);
         });
       }
     } else {
-      this.setState({ isSelected: false }, () => {
-        console.log(this.state.isSelected);
-      });
+      this.setState({ isSelected: false })
     }
 
   }

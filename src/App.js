@@ -19,13 +19,29 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const web3 = getWeb3();
-    const accounts = await web3.eth.getAccounts();
-    const balance = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
-    this.setState({
-      accounts,
-      balance,
-    });
+    // const web3 = getWeb3();
+    // console.log(web3)
+    // const accounts = await web3.eth.getAccounts();
+    // const balance = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
+    // this.setState({
+    //   accounts,
+    //   balance,
+    // });
+
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const web3 = getWeb3();
+        const balance = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
+        this.setState({ accounts, balance })
+      } catch (error) {
+        if (error.code === 4001) {
+          // User rejected request
+        }
+    
+        console.log(error)
+      }
+    }
   }
 
   render() {
