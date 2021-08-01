@@ -258,7 +258,7 @@ class ThreeScene extends Component {
           }}
           />
         <div style={{position: 'absolute', top: '25%', margin: 'auto', left: '30%', right: '30%', textAlign: "center"}}>
-            <h1 className="text-center" style={{color: "white"}}>Welcome to NftCeption</h1>
+            <h1 className="text-center" style={{color: "white"}}>Welcome to Planeth</h1>
             <a className="href" target="_self" href="/play" style={{paddingLeft: 15, paddingRight: 15, paddingTop: 10, paddingBottom: 5, fontSize: 20, textDecoration: 'none'}} >Play</a>
         </div>
 

@@ -74,7 +74,7 @@ class App extends Component {
                   styled
                   style={{ position: "absolute", top: 0, width: "100vw" , display:"flex"}}
                 >
-                  <Navbar.Brand href='#home'>NFT PlanEth</Navbar.Brand>
+                  <Navbar.Brand href='#home'>Planeth</Navbar.Brand>
 
                   <Nav.Link href='#home'>
                       {" "}
