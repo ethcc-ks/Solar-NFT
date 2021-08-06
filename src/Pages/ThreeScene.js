@@ -65,8 +65,10 @@ class ThreeScene extends Component {
 
   async componentDidMount() {
 
-    this.setState({ contract: this.context.instance });
-    this.setState({ accounts: await this.context.accountsPromise }); 
+    console.log("quering the graph");
+    this.queryGraph();
+    this.setState({contract: this.context.instance});
+    this.setState({accounts: await this.context.accountsPromise});
 
     const width = this.state.width;
     const height = this.state.height;
@@ -183,6 +185,7 @@ class ThreeScene extends Component {
     this.planetArray.push(planet);
     this.setState({ planets: planet }, () => {
       console.log(this.state.planets);
+      //console.log(this.state.planets);
     });
   }
 
@@ -211,7 +214,7 @@ class ThreeScene extends Component {
       description: NFTDescription,
       image: NFTFile
     });
-    console.log(metadata.url);
+   // console.log(metadata.url);
 
     const mintedPlanet = await this.state.contract.methods.mintPlanet(metadata.url, NFTName)
       .send({ from: this.state.accounts[0], value: 0.002 * 10 ** 18 })
@@ -334,6 +337,7 @@ class ThreeScene extends Component {
             }
           }
           `
+
     const client = new ApolloClient({
       uri: this.GraphURL,
       cache: new InMemoryCache()
