@@ -2,27 +2,19 @@ import React, { Component } from "react";
 import * as THREE from "three";
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import BlockchainContext from "../context/BlockchainContext";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 
 
-class ThreeScene extends Component {
+class Home extends Component {
 
     constructor(props) {
       super(props);
   
       this.state = {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: window.innerWidth/2,
+        height: window.innerHeight/2,
         planets: [],
-        raycaster: new THREE.Raycaster(),
-        intersected: null,
-        isSelected: false,
-        balance: 0,
-        accounts: null,
-        showPopup: false,
-        showNFTLoader: true,
-        contract: null,
-        clickPlanetID: 0,
       };
   
       this.planetArray = [];
@@ -39,14 +31,11 @@ class ThreeScene extends Component {
     }
   
     updateDimensions = () => {
-      this.setState({ width: window.innerWidth, height: window.innerHeight });
+      this.setState({ width: window.innerWidth/2, height: window.innerHeight/2 });
     };
 
   
     async componentDidMount() {
-  
-      this.setState({ contract: this.context.instance });
-      this.setState({ accounts: await this.context.accountsPromise }); 
   
       const width = this.state.width;
       const height = this.state.height;
@@ -63,10 +52,6 @@ class ThreeScene extends Component {
       this.camera.position.y = 102;
       this.camera.rotation.x = -0.2;
       this.camera.lookAt(this.scene.position);
-
-      var loader  = new THREE.TextureLoader();
-      const texture = loader.load( "url(http://localhost:3000/skydome.png)" );
-      this.scene.background = texture;
 
       //LIGHTS
       var lights = [];
@@ -253,19 +238,29 @@ class ThreeScene extends Component {
     render() {
       return (
         <div className="App">
-          <div ref={mount => {
-            this.mount = mount
-          }}
-          />
-        <div style={{position: 'absolute', top: '25%', margin: 'auto', left: '30%', right: '30%', textAlign: "center"}}>
-            <h1 className="text-center" style={{color: "white"}}>Welcome to Planeth</h1>
-            <a className="href" target="_self" href="/play" style={{paddingLeft: 15, paddingRight: 15, paddingTop: 10, paddingBottom: 5, fontSize: 20, textDecoration: 'none'}} >Play</a>
-        </div>
-
+          <Container style={{textAlign: "left"}} fluid>
+            <Row className="justify-content-md-center align-items-center">
+              <Col xs={{span: 12, order: 2}} md={{span: 3, order: 1}}>
+                <div className="p-5" style={{borderStyle: "none", color: 'white'}}>
+                  <h1>Planeth</h1>
+                  <p>Promote your NFTs in the best way possible</p>
+                  <Button className='border-0' href="/play">Get Started</Button>
+                </div>
+              </Col>
+              <Col xs={{span: 12, order: 1}} md={{span: 6, order: 2}}>
+                <div className="p-5">
+                  <div ref={mount => {
+                    this.mount = mount
+                  }}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Container>
         </div>
       )
     }
 }
-ThreeScene.contextType = BlockchainContext;
+Home.contextType = BlockchainContext;
   
-export default ThreeScene;
+export default Home;

@@ -1,4 +1,4 @@
-import React, { Component, useLayoutEffect } from "react";
+import React, { Component } from "react";
 import * as THREE from "three";
 import OrbitControls from "three-orbitcontrols";
 import LendingPopup from "../Component/LendingPopup"
@@ -17,7 +17,7 @@ class ThreeScene extends Component {
 
     this.state = {
       width: window.innerWidth,
-      height: window.innerHeight,
+      height: window.innerHeight-77,
       planets: [],
       raycaster: new THREE.Raycaster(),
       intersected: null,
