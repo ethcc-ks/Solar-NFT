@@ -3,9 +3,10 @@ import { BrowserRouter as Router, } from "react-router-dom";
 
 import getWeb3 from "./getWeb3";
 import NFTPlanet from "./contracts/NFTplanet.json";
-import { Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import Routes from "./Routes";
 import BlockchainContext from "./context/BlockchainContext";
+import Home from "./Pages/Landing";
 
 class App extends Component {
   constructor() {
@@ -17,17 +18,23 @@ class App extends Component {
       balance:0,
     };
   }
-
-  async componentDidMount() {
-    // const web3 = getWeb3();
-    // console.log(web3)
-    // const accounts = await web3.eth.getAccounts();
-    // const balance = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
-    // this.setState({
-    //   accounts,
-    //   balance,
-    // });
-
+  async componentDidMount () {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const web3 = getWeb3();
+        const balance = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
+        this.setState({ accounts, balance })
+      } catch (error) {
+        if (error.code === 4001) {
+          // User rejected request
+        }
+    
+        console.log(error)
+      }
+    }
+  }
+  async getAccounts () {
     if (window.ethereum) {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -68,28 +75,25 @@ class App extends Component {
               <BlockchainContext.Provider
                 value={{ instance, accountsPromise, web3 }}
               >
-                <Navbar
-                  bg='light'
-                  variant='light'
-                  styled
-                  style={{ position: "absolute", top: 0, width: "100vw" , display:"flex"}}
-                >
-                  <Navbar.Brand href='#home'>Planeth</Navbar.Brand>
-
-                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                  <Navbar.Collapse className='justify-content-end'> 
-                    <Nav.Link>
-                      {" "}
-                      Signed in as: {this.state.accounts[0]}
-                    </Nav.Link>
-                    <Nav className='mr-auto'>
-                      <Nav.Link href="/">Home</Nav.Link>
-                      <Nav.Link href="/play">Play</Nav.Link>
-                      <Nav.Link href="/users">Users</Nav.Link>
-                      <Nav.Link href="/campaign">Campaign</Nav.Link>
-                    </Nav>
-                    <Navbar.Text>Balance: {this.state.balance} ETH</Navbar.Text>
-                  </Navbar.Collapse>
+                <Navbar variant="dark" expand="lg" style={{borderBottom: '1px solid', borderImage: 'linear-gradient(to right, rgba(30, 150, 250, 0.5), rgba(200, 30, 200, 0.5))', borderImageSlice: '5', backgroundColor: 'black'}}>
+                        <Container fluid>
+                            <Navbar.Brand href="/">
+                                <img src='logo192.png' style={{width: 50, height: 'auto'}} alt=''/>
+                            </Navbar.Brand>
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Navbar.Collapse id="basic-navbar-nav">
+                              <Nav.Link>
+                                {" "}
+                                Signed in as: {this.state.accounts[0]}
+                              </Nav.Link>
+                              <Nav className='mr-auto'>
+                                <Nav.Link href="/play">Play</Nav.Link>
+                                <Nav.Link href="/users">Users</Nav.Link>
+                                <Nav.Link href="/campaign">Campaign</Nav.Link>
+                              </Nav>
+                              <Navbar.Text>Balance: {this.state.balance} ETH</Navbar.Text>
+                            </Navbar.Collapse>
+                        </Container>
                 </Navbar>
                 <Routes />
               </BlockchainContext.Provider>
@@ -100,7 +104,26 @@ class App extends Component {
         throw new Error();
       }
     } catch (error) {
-      return <div style={{position: 'absolute', top: '25%', margin: 'auto', left: '20%', right: '20%', textAlign: "center", fontSize: 50}}>Loading Web3, accounts, and contract...</div>;
+      return (
+        <div className='App'>
+          <Router>
+              <Navbar variant="dark" expand="lg" style={{borderBottom: '1px solid', borderImage: 'linear-gradient(to right, rgba(30, 150, 250, 0.5), rgba(200, 30, 200, 0.5))', borderImageSlice: '5', backgroundColor: 'black'}}>
+                      <Container fluid>
+                          <Navbar.Brand href="/">
+                              <img src='logo192.png' style={{width: 50, height: 'auto'}} alt=''/>
+                          </Navbar.Brand>
+                          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                          <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className='ml-auto'>
+                              <Button className='border-0 coloredreverse' onClick={() => { this.getAccounts()}}>Connect To MetaMask</Button>
+                            </Nav>
+                          </Navbar.Collapse>
+                      </Container>
+                      </Navbar>
+              <Home/>
+          </Router>
+        </div>
+      );
     }
   }
 }
