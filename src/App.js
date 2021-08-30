@@ -76,21 +76,18 @@ class App extends Component {
                 >
                   <Navbar.Brand href='#home'>Planeth</Navbar.Brand>
 
-                  <Nav.Link href='#home'>
+                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                  <Navbar.Collapse className='justify-content-end'> 
+                    <Nav.Link>
                       {" "}
                       Signed in as: {this.state.accounts[0]}
                     </Nav.Link>
-
-                  <Nav className='mr-auto'>
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/play">Play</Nav.Link>
-                    <Nav.Link href="/users">Users</Nav.Link>
-                    <Nav.Link href="/campaign">Campaign</Nav.Link>
-
-
-                  </Nav>
-
-                  <Navbar.Collapse className='justify-content-end'>
+                    <Nav className='mr-auto'>
+                      <Nav.Link href="/">Home</Nav.Link>
+                      <Nav.Link href="/play">Play</Nav.Link>
+                      <Nav.Link href="/users">Users</Nav.Link>
+                      <Nav.Link href="/campaign">Campaign</Nav.Link>
+                    </Nav>
                     <Navbar.Text>Balance: {this.state.balance} ETH</Navbar.Text>
                   </Navbar.Collapse>
                 </Navbar>
