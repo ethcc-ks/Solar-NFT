@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import * as THREE from "three";
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import BlockchainContext from "../context/BlockchainContext";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import Service from "../Component/service";
 
 
 
@@ -15,11 +15,12 @@ class Home extends Component {
         width: window.innerWidth/2,
         height: window.innerHeight/2,
         planets: [],
+        service: new Service(),
       };
   
       this.planetArray = [];
       this.planetDictionary = {};
-      this.GraphURL = "https://api.studio.thegraph.com/query/3145/ks/v0.0.15";
+      this.GraphURL = "https://api.studio.thegraph.com/query/5410/planeth/v0.0.12";
       this.mouse = new THREE.Vector2();
       this.intersected = null;
   
@@ -82,10 +83,10 @@ class Home extends Component {
         this.scene.add(ellipse);
       }
       
-      const graphResult = await this.queryPlanetsFromGraph();
-      graphResult.data.transfers.map((transfer)=>{
-        const radius = this.getRandomLogInt(2,5);
-        this.createSphere(radius, transfer.id);
+      const graphResult = await this.state.service.queryPlanetsFromGraph();
+      graphResult.data.planets.map((planet)=> {
+        const radius = this.state.service.getRandomLogInt(2,5);
+        this.createSphere(radius, planet.id, planet.tokenURI);
       });
       this.renderScene();
       //start animation
@@ -120,7 +121,7 @@ class Home extends Component {
       cubeMesh.position.y = 0;
       planet.mesh = cubeMesh;
       this.planetDictionary[planet.mesh.uuid] = planetID
-      this.addPlanet(planet);
+      this.planetArray.push(planet);
   
       cubeMesh.rotation.x = Math.random() * 2 * Math.PI;
       cubeMesh.rotation.y = Math.random() * 2 * Math.PI;
@@ -136,13 +137,6 @@ class Home extends Component {
       cubeMesh.rotation.z = Math.random() * 2 * Math.PI;
   
       this.scene.add(cubeMesh);
-    }
-  
-    addPlanet = (planet) => {
-      this.planetArray.push(planet);
-      this.setState({ planets: planet }, () => {
-        console.log(this.state.planets);
-      });
     }
   
     getXYPosition = (planet) => {
@@ -179,57 +173,6 @@ class Home extends Component {
   
     };
   
-    queryPlanetsFromGraph = () => {
-      const planetRequest = `
-              query {
-                transfers {
-                  id
-                }
-              }
-            `
-      const client = new ApolloClient({
-        uri: this.GraphURL,
-        cache: new InMemoryCache()
-      });
-  
-      const result = client.query({
-        query: gql(planetRequest)
-      })
-        .then(data => {
-          console.log("Subgraph data: ", data)
-          return data;
-        })
-        .catch(err => { console.log("Error fetching data: ", err) });
-      return result;
-    }
-    queryNftsFromGraph = () => {
-      const nftRequest = `
-            query {
-              nftinplanets {
-                planetid
-                owner
-                nftaddress
-                nftid
-              }
-            }
-            `
-      const client = new ApolloClient({
-        uri: this.GraphURL,
-        cache: new InMemoryCache()
-      });
-  
-      let receivedData;
-      client.query({
-        query: gql(nftRequest)
-      })
-        .then(data => {
-          console.log("Subgraph data: ", data)
-          receivedData = data;
-        })
-        .catch(err => { console.log("Error fetching data: ", err) });
-      return receivedData;
-    }
-  
     renderScene = () => {
   
       if (this.renderer) this.renderer.render(this.scene, this.camera);
@@ -238,7 +181,7 @@ class Home extends Component {
     render() {
       return (
         <div className="App">
-          <Container style={{textAlign: "left"}} fluid>
+          <Container style={{textAlign: "left", paddingTop: '5%'}} fluid>
             <Row className="justify-content-md-center align-items-center">
               <Col xs={{span: 12, order: 2}} md={{span: 3, order: 1}}>
                 <div className="p-5" style={{borderStyle: "none", color: 'white'}}>

@@ -1,5 +1,5 @@
-const PlanetReact = artifacts.require("PlanetReact");
+const NFTplanet = artifacts.require("NFTPlanet");
 module.exports = function (deployer) {
-  deployer.deploy(PlanetReact);
+  deployer.deploy(NFTplanet);
 }
 

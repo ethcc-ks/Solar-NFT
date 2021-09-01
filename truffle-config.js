@@ -102,5 +102,13 @@ compilers: {
 
   db: {
     enabled: false
-  }
+  },
+
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  
+  api_keys: {
+    etherscan: '7F9FANI79KMS5W817Z41IXA12NIT1UWPKE'
+   },
 };

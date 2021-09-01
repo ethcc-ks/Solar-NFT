@@ -22,7 +22,6 @@ class Popup extends Component {
     };
 
     handleSubmission = async () => {
-        let data = this;
         console.log(this.state.selectedFile);
         console.log(this.state.NFTName)
         await this.props.createNFTPlanet(this.state.NFTName, this.state.NFTDescription, this.state.selectedFile);
