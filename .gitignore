@@ -24,3 +24,5 @@ yarn-error.log*
 
 .env
 /.env
+
+/subgraph-studio/node_modules/

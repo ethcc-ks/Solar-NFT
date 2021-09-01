@@ -21,7 +21,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isRegistered\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IProofOfHumanity.sol\":\"ProofOfHumanity\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IProofOfHumanity.sol\":{\"keccak256\":\"0x2acdb1dff4462ddc9e6370023f5248ca27f68ac19f5ca0cf51269a074928ca83\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a132fe8b8f7e73b240fc1b8e20b5b26e3f39f7499ce1640a112a70620e6eac0a\",\"dweb:/ipfs/QmQMx3yLKBZiURKpJpTy3vz8atLz3AXD2oALXBNmhFqjka\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isRegistered\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IProofOfHumanity.sol\":\"ProofOfHumanity\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IProofOfHumanity.sol\":{\"keccak256\":\"0x8a7c9db3f2030f01057aa5bddbafdf55ce54f15af79e701116b86bc18ae37a2d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2d93a261864c856363ee6ffdafb0cbe64a5427d9515587bc5e126aa5d19c74ae\",\"dweb:/ipfs/QmRaY2rCUMH8GKdx9cgJLm2e6TqgFZA36bsYRhEjn47xx8\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -29,8 +29,8 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n\ninterface ProofOfHumanity{\n    function isRegistered(address) external view returns (bool);\n}",
-  "sourcePath": "/Users/nikitaterekhov/Projects/ETHCC/Solar-NFT/contracts/IProofOfHumanity.sol",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\n//We using Kleros implementation\r\n\r\ninterface ProofOfHumanity{\r\n    function isRegistered(address) external view returns (bool);\r\n}",
+  "sourcePath": "C:\\Users\\cesar\\Documents\\GitHub\\Solar-NFT\\contracts\\IProofOfHumanity.sol",
   "ast": {
     "absolutePath": "project:/contracts/IProofOfHumanity.sol",
     "exportedSymbols": {
@@ -51,7 +51,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:15"
+        "src": "33:23:15"
       },
       {
         "abstract": false,
@@ -85,7 +85,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 2498,
-                  "src": "111:7:15",
+                  "src": "150:7:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -96,7 +96,7 @@
                     "id": 2492,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "111:7:15",
+                    "src": "150:7:15",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -106,7 +106,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "110:9:15"
+              "src": "149:9:15"
             },
             "returnParameters": {
               "id": 2497,
@@ -119,7 +119,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 2498,
-                  "src": "143:4:15",
+                  "src": "182:4:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -130,7 +130,7 @@
                     "id": 2495,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "143:4:15",
+                    "src": "182:4:15",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -139,20 +139,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "142:6:15"
+              "src": "181:6:15"
             },
             "scope": 2499,
-            "src": "89:60:15",
+            "src": "128:60:15",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
         "scope": 2500,
-        "src": "58:93:15"
+        "src": "96:95:15"
       }
     ],
-    "src": "32:119:15"
+    "src": "33:158:15"
   },
   "legacyAST": {
     "absolutePath": "project:/contracts/IProofOfHumanity.sol",
@@ -174,7 +174,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:15"
+        "src": "33:23:15"
       },
       {
         "abstract": false,
@@ -208,7 +208,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 2498,
-                  "src": "111:7:15",
+                  "src": "150:7:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -219,7 +219,7 @@
                     "id": 2492,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "111:7:15",
+                    "src": "150:7:15",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -229,7 +229,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "110:9:15"
+              "src": "149:9:15"
             },
             "returnParameters": {
               "id": 2497,
@@ -242,7 +242,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 2498,
-                  "src": "143:4:15",
+                  "src": "182:4:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -253,7 +253,7 @@
                     "id": 2495,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "143:4:15",
+                    "src": "182:4:15",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -262,28 +262,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "142:6:15"
+              "src": "181:6:15"
             },
             "scope": 2499,
-            "src": "89:60:15",
+            "src": "128:60:15",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
         "scope": 2500,
-        "src": "58:93:15"
+        "src": "96:95:15"
       }
     ],
-    "src": "32:119:15"
+    "src": "33:158:15"
   },
   "compiler": {
     "name": "solc",
     "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-24T19:42:33.806Z",
+  "schemaVersion": "3.4.2",
+  "updatedAt": "2021-08-31T07:32:04.534Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
